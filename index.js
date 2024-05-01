@@ -1,13 +1,21 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://Lovelyram:iyoR4PavAHev32cL@cluster0.83s8v4s.mongodb.net/?retryWrites=true&w=majority&appName=cluster0";
+const uri = "mongodb+srv://Lovelyram:o3BrHjWq8ZEAQo7D@cluster0.83s8v4s.mongodb.net/?retryWrites=true&w=majority&appName=cluster0";
 const express= require("express")
 const app=express()
 const doenv=require("dotenv").config()
-const port=process.env.PORT || 5000;
+const port=5000;
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
+
+app.get("/",(_req,res)=>{
+  
+  res.json({
+    name:"Lovely",
+    message:"Hello World"
+  })
+})
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
