@@ -7,9 +7,9 @@ const createUser=async(req,res)=>{
         res.send({"msg":"user already exists"})
     }
     else{
-        const newuser=usermodel.create(req.body)
+        usermodel.create(req.body)
         
-        res.json({msg:"user created successfully",newuser})
+        res.json({msg:"user created successfully"})
     }
     
 }
