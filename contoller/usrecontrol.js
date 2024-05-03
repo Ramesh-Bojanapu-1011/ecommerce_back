@@ -46,13 +46,57 @@ const login_User_Controle = asyncHandler(async (req, res) => {
         Fist_name: user?.Fist_name,
         Last_name: user?.Last_name,
         mobile: user?.mobile,
-        email:user?.email,
-        password:password,
-        tocken:generate_Token(user?._id)
+        email: user?.email,
+        password: password,
+        tocken: generate_Token(user?._id),
       },
     });
     // res.json({"status":200,"message":"login successfully","data":user_details});
   } else res.json({ status: 400, message: "login failed", data: user_details });
 });
 
-module.exports = { createUser, login_User_Controle };
+const get_all_users = asyncHandler(async (req, res) => {
+  try {
+    const getAllUsers = await usermodel.find();
+    res.json(getAllUsers);
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
+  }
+});
+
+const get_single_user = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+  try {
+    const getauser = await usermodel.findByIdAndDelete(id);
+    res.json({ getauser });
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
+  }
+});
+
+const update_user = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const UpdateUser = await usermodel.findByIdAndUpdate(
+      id,
+      {
+        $set: req.body,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json({ UpdateUser });
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
+  }
+});
+
+module.exports = {
+  createUser,
+  login_User_Controle,
+  get_all_users,
+  get_single_user,
+  update_user,
+};
