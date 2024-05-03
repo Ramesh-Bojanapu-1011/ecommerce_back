@@ -64,11 +64,22 @@ const get_all_users = asyncHandler(async (req, res) => {
   }
 });
 
-const get_single_user = asyncHandler(async (req, res) => {
+const delete_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
   console.log(req.params);
   try {
     const getauser = await usermodel.findByIdAndDelete(id);
+    res.json({ getauser });
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
+  }
+});
+
+const get_single_user = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log(req.params);
+  try {
+    const getauser = await usermodel.findById(id);
     res.json({ getauser });
   } catch (error) {
     throw new Error({ status: 400, message: error });
@@ -97,6 +108,7 @@ module.exports = {
   createUser,
   login_User_Controle,
   get_all_users,
+  delete_user,
   get_single_user,
   update_user,
 };
