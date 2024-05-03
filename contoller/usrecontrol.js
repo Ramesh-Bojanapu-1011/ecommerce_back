@@ -19,12 +19,29 @@ const createUser = asyncHandler(async (req, res) => {
       throw new Error(`user already exists ${user.email}`);
     }
   } else {
-    const new_user=await usermodel.create(req.body);
-    
-    res.json({ status:200,data: new_user });
+    const new_user = await usermodel.create(req.body);
+
+    res.json({ status: 200, data: new_user });
 
     // res.json({ msg: "user created successfully" });
   }
 });
 
-module.exports = { createUser };
+const login_User_Controle = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const user_details = {
+    email: email,
+    password: password,
+  };
+  
+  console.log(user_details);
+  const user = await usermodel.findOne({ email: email });
+  if (user && (await user.is_password_is_matched(password))) {
+    res.json({"status":200,"message":"login successfully","data":user_details});
+  }
+  else(
+    res.json({"status":400,"message":"login failed","data":user_details})
+  )
+});
+
+module.exports = { createUser, login_User_Controle };
