@@ -2,6 +2,7 @@ const db_connect = require("./config/dbconnect");
 const express = require("express");
 const authRouter = require("./routes/authroute");
 const bodyParser = require("body-parser");
+const { not_found, error_handler } = require("./middlewares/errorhandler");
 
 const dotenv=require("dotenv").config()
 
@@ -13,7 +14,11 @@ app.listen(PORT, () => {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 
-app.use("/api/user/",authRouter)
+app.use("/api/user/",authRouter);
+
+
+app.use(not_found);
+app.use(error_handler)
 
 
 
