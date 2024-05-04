@@ -15,6 +15,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 
 app.use("/api/user/",authRouter);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 
 app.use(not_found);
