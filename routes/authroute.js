@@ -8,6 +8,8 @@ const {
   update_user,
   delete_user,
   get_single_user,
+  block_user,
+  unblock_user,
 } = require("../contoller/usrecontrol");
 const { authMiddleware, isAdmin } = require("../middlewares/authmiddleware");
 
@@ -18,5 +20,7 @@ router.delete("/delete/:id", delete_user);
 router.get("/get-user-details/:id", get_single_user);
 router.put("/update-user/:id", update_user,authMiddleware);
 router.get("/user-type/:id", authMiddleware, isAdmin, get_single_user);
+router.get("/block-user/:id", block_user,isAdmin, authMiddleware);
+router.get("/unblock-user/:id", unblock_user,isAdmin, authMiddleware);
 
 module.exports = router;

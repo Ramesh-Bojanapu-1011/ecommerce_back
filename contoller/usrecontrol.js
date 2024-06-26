@@ -59,6 +59,7 @@ const get_all_users = asyncHandler(async (req, res) => {
   try {
     const getAllUsers = await usermodel.find();
     res.json(getAllUsers);
+    console.log(getAllUsers)
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
@@ -104,6 +105,42 @@ const update_user = asyncHandler(async (req, res) => {
   }
 });
 
+const block_user =asyncHandler(async (req,res)=>{
+  const {id} = req.params;
+  try{
+    const blockUser = await usermodel.findByIdAndUpdate(id,{
+      $set:{
+        isBlocked:true
+        }
+      },
+      {
+        new:true
+      });
+      res.json({blockUser});
+      }
+  catch(error){
+    throw new Error({status:400,message:error});
+  }
+})
+
+const unblock_user =asyncHandler(async (req,res)=>{
+  const {id} = req.params;
+  try{
+    const blockUser = await usermodel.findByIdAndUpdate(id,{
+      $set:{
+        isBlocked:false
+        }
+      },
+      {
+        new:true
+      });
+      res.json({blockUser});
+      }
+  catch(error){
+    throw new Error({status:400,message:error});
+  }
+})
+
 module.exports = {
   createUser,
   login_User_Controle,
@@ -111,4 +148,6 @@ module.exports = {
   delete_user,
   get_single_user,
   update_user,
+  unblock_user,
+  block_user
 };
