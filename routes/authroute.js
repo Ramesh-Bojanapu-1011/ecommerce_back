@@ -13,6 +13,8 @@ const {
 } = require("../contoller/usrecontrol");
 const { authMiddleware, isAdmin } = require("../middlewares/authmiddleware");
 
+/* This code snippet is defining various routes using the Express Router in a Node.js application.
+Here's a breakdown of what each route is doing: */
 router.post("/register", createUser);
 router.post("/login", login_User_Controle);
 router.get("/all_users", get_all_users);

@@ -1,5 +1,9 @@
 const { default: mongoose } = require("mongoose");
 
+/**
+ * The function `db_connect` attempts to connect to a MongoDB database using Mongoose and logs a
+ * success message if the connection is successful.
+ */
 const db_connect = () => {
   try {
     mongoose.connect(
