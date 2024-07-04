@@ -30,7 +30,7 @@ const isAdmin = asyncHandler(async (req, res, next) => {
   console.log(req.user);
   const { email } = req.user;
   const Admin_user = await User.findOne({ email });
-  if (Admin_user && Admin_user.role=="admin") {
+  if (Admin_user && Admin_user.role == "admin") {
     next();
   } else {
     res.status(401);
@@ -39,4 +39,3 @@ const isAdmin = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = { authMiddleware, isAdmin };
-

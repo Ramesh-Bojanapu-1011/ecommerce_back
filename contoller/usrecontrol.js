@@ -66,7 +66,7 @@ const get_all_users = asyncHandler(async (req, res) => {
   try {
     const getAllUsers = await usermodel.find();
     res.json(getAllUsers);
-    console.log(getAllUsers)
+    console.log(getAllUsers);
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
@@ -76,7 +76,7 @@ const get_all_users = asyncHandler(async (req, res) => {
 provided user ID. Here is a breakdown of what the function does: */
 const delete_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id)
+  validate_mongoos_id(id);
   console.log(req.params);
   try {
     const getauser = await usermodel.findByIdAndDelete(id);
@@ -90,7 +90,7 @@ const delete_user = asyncHandler(async (req, res) => {
 the provided user ID. Here is a breakdown of what the function does: */
 const get_single_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id)
+  validate_mongoos_id(id);
   console.log(req.params);
   try {
     const getauser = await usermodel.findById(id);
@@ -104,7 +104,7 @@ const get_single_user = asyncHandler(async (req, res) => {
 the provided user ID. Here is a breakdown of what the function does: */
 const update_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id)
+  validate_mongoos_id(id);
   try {
     const UpdateUser = await usermodel.findByIdAndUpdate(
       id,
@@ -127,45 +127,49 @@ validates the `id` using the `validate_mongoos_id` function, and then attempts t
 `isBlocked` status to `true` using `usermodel.findByIdAndUpdate`. If the update is successful, it
 returns the updated user object with the `isBlocked` set to `true`. If there is an error during the
 process, it throws an error with status code 400 and the error message. */
-const block_user =asyncHandler(async (req,res)=>{
-  const {id} = req.params;
-  validate_mongoos_id(id)
-  try{
-    const blockUser = await usermodel.findByIdAndUpdate(id,{
-      $set:{
-        isBlocked:true
-        }
+const block_user = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validate_mongoos_id(id);
+  try {
+    const blockUser = await usermodel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          isBlocked: true,
+        },
       },
       {
-        new:true
-      });
-      res.json({blockUser});
+        new: true,
       }
-  catch(error){
-    throw new Error({status:400,message:error});
+    );
+    res.json({ blockUser });
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
   }
-})
+});
 
 /* The `unblock_user` function is responsible for updating a user's `isBlocked` status to `false` in
 the database based on the provided user ID. Here is a breakdown of what the function does: */
-const unblock_user =asyncHandler(async (req,res)=>{
-  const {id} = req.params;
-  validate_mongoos_id(id)
-  try{
-    const blockUser = await usermodel.findByIdAndUpdate(id,{
-      $set:{
-        isBlocked:false
-        }
+const unblock_user = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validate_mongoos_id(id);
+  try {
+    const blockUser = await usermodel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          isBlocked: false,
+        },
       },
       {
-        new:true
-      });
-      res.json({blockUser});
+        new: true,
       }
-  catch(error){
-    throw new Error({status:400,message:error});
+    );
+    res.json({ blockUser });
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
   }
-})
+});
 
 /* The `module.exports` statement in the JavaScript code snippet is exporting an object that contains
 references to various functions defined in the file. By exporting these functions, they become
@@ -179,5 +183,5 @@ module.exports = {
   get_single_user,
   update_user,
   unblock_user,
-  block_user
+  block_user,
 };

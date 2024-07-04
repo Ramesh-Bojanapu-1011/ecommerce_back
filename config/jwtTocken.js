@@ -1,4 +1,4 @@
-const jwt =require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 /**
  * The function `generate_Token` generates a JWT token with a specified `id` and expiration time of 3
@@ -8,8 +8,7 @@ const jwt =require("jsonwebtoken")
  * @returns A JSON Web Token (JWT) is being returned with the user's ID embedded in it, which expires
  * in 3 days.
  */
-const generate_Token=(id)=>
-    {
-        return jwt.sign({id},process.env.jwt_sckrit,{expiresIn:"3d"});
-    };
-module.exports={generate_Token}
+const generate_Token = (id) => {
+  return jwt.sign({ id }, process.env.jwt_sckrit, { expiresIn: "3d" });
+};
+module.exports = { generate_Token };
