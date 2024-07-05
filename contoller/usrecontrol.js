@@ -2,6 +2,7 @@ const { generate_Token } = require("../config/jwtTocken");
 const usermodel = require("../models/usermodel");
 const asyncHandler = require("express-async-handler");
 const validate_mongoos_id = require("../utils/validatemongodgid");
+const { generate_Refresh_Token } = require("../config/RefreshTocan");
 
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
@@ -43,6 +44,19 @@ const login_User_Controle = asyncHandler(async (req, res) => {
   console.log(user_details);
   const user = await usermodel.findOne({ email: email });
   if (user && (await user.is_password_is_matched(password))) {
+    const refreshToken = await generate_Refresh_Token(user?.id);
+    const update_user = await usermodel.findByIdAndUpdate(
+      user.id,
+      {
+        refreshToken: refreshToken,
+      },
+      { new: true }
+    );
+    console.log(update_user)
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 72 * 60 * 60 * 1000,
+    });
     res.json({
       status: 200,
       message: "login successfully",
