@@ -7,7 +7,7 @@ const { default: mongoose } = require("mongoose");
 const db_connect = () => {
   try {
     mongoose.connect(
-      "mongodb+srv://Lovelyram:u96W8zjMrFYSzAIx@cluster0.83s8v4s.mongodb.net/ecommerence?retryWrites=true&w=majority&appName=cluster0"
+      "mongodb+srv://Lovelyram:qYIvnrL3zf11O6nI@cluster0.e40gwsk.mongodb.net/ecommerence?retryWrites=true&w=majority&appName=Cluster0"
     );
     console.log("Database Connected Successfully");
   } catch (error) {
