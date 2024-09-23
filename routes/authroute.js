@@ -9,6 +9,7 @@ const {
   get_single_user,
   block_user,
   unblock_user,
+  handle_refresh_token,
 } = require("../contoller/usrecontrol");
 const { authMiddleware, isAdmin } = require("../middlewares/authmiddleware");
 
@@ -23,5 +24,7 @@ router.put("/update-user/:id", update_user, authMiddleware);
 router.get("/user-type/:id", authMiddleware, isAdmin, get_single_user);
 router.get("/block-user/:id", block_user, isAdmin, authMiddleware);
 router.get("/unblock-user/:id", unblock_user, isAdmin, authMiddleware);
+router.get("/refresh", handle_refresh_token);
+
 
 module.exports = router;

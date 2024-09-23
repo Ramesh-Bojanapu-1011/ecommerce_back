@@ -52,7 +52,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
       },
       { new: true }
     );
-    console.log(update_user)
+    console.log(update_user);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
@@ -112,6 +112,17 @@ const get_single_user = asyncHandler(async (req, res) => {
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
+});
+
+/* The `handle_refresh_token` function is responsible for handling the refresh token process. In this
+function, it retrieves the cookies from the request object using `req.cookies`, sends the cookies
+back as a response using `res.send(cookie)`, and logs the cookies to the console using
+`console.log(cookie)`. This function is typically used to manage the refresh token mechanism in a
+web application, allowing users to obtain a new access token without having to log in again. */
+const handle_refresh_token = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  res.send(cookie)
+  console.log(cookie);
 });
 
 /* The `update_user` function is responsible for updating a user's information in the database based on
@@ -198,4 +209,5 @@ module.exports = {
   update_user,
   unblock_user,
   block_user,
+  handle_refresh_token,
 };
