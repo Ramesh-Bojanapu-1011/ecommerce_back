@@ -3,6 +3,8 @@ const usermodel = require("../models/usermodel");
 const asyncHandler = require("express-async-handler");
 const validate_mongoos_id = require("../utils/validatemongodgid");
 const { generate_Refresh_Token } = require("../config/RefreshTocan");
+const jwt = require("jsonwebtoken");
+
 
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
@@ -44,7 +46,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
   console.log(user_details);
   const user = await usermodel.findOne({ email: email });
   if (user && (await user.is_password_is_matched(password))) {
-    const refreshToken = await generate_Refresh_Token(user?.id);
+    const refreshToken = await generate_Refresh_Token(user?._id);
     const update_user = await usermodel.findByIdAndUpdate(
       user.id,
       {
@@ -56,6 +58,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
+      secure: true
     });
     res.json({
       status: 200,
@@ -114,16 +117,44 @@ const get_single_user = asyncHandler(async (req, res) => {
   }
 });
 
-/* The `handle_refresh_token` function is responsible for handling the refresh token process. In this
-function, it retrieves the cookies from the request object using `req.cookies`, sends the cookies
-back as a response using `res.send(cookie)`, and logs the cookies to the console using
-`console.log(cookie)`. This function is typically used to manage the refresh token mechanism in a
-web application, allowing users to obtain a new access token without having to log in again. */
+/* The `handle_refresh_token` function is responsible for handling the refresh token process. Here is a
+breakdown of what the function does: */
 const handle_refresh_token = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
-  res.send(cookie)
-  console.log(cookie);
+  console.log(cookie)
+  if (!cookie?.refreshToken) throw new Error(" No refresh tokuen in cookie");
+  const refreshToken = cookie.refreshToken;
+  // console.log(refreshToken);
+
+  const user = await usermodel.findOne({ refreshToken });
+  if (!user) throw new Error(" No refresh token in db or not matched ");
+  jwt.verify(refreshToken, process.env.jwt_sckrit, (err, decoded) => {
+    if (err || user.id !== decoded.id) { throw new Error(" invalid refresh token") };
+    const token = generate_Token(user?._id)
+    res.json({ token });
+  });
 });
+
+
+
+//logout function 
+
+const handlelogout = asyncHandler(async (req, res) => {
+  const cookie = req.cookies;
+  if (!cookie?.refreshToken) throw new Error(" No refresh tokuen in cookie");
+  const refreshToken = cookie.refreshToken;
+  const user = await usermodel.findOne({ refreshToken });
+  if (!user) throw new Error(" No refresh token in db or not matched ");
+  // const newRefreshToken = generate_Token(user._id);
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
+  res.json({ message: "Logged out successfully" });
+});
+
+
 
 /* The `update_user` function is responsible for updating a user's information in the database based on
 the provided user ID. Here is a breakdown of what the function does: */
@@ -210,4 +241,5 @@ module.exports = {
   unblock_user,
   block_user,
   handle_refresh_token,
+  handlelogout,
 };
