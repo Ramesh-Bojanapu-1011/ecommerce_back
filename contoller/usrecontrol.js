@@ -137,8 +137,8 @@ const handle_refresh_token = asyncHandler(async (req, res) => {
 
 
 
-//logout function 
-
+/* The `handlelogout` function is responsible for logging out a user from the system. Here is a
+breakdown of what the function does: */
 const handlelogout = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
   if (!cookie?.refreshToken) throw new Error(" No refresh tokuen in cookie");
