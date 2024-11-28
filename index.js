@@ -1,6 +1,7 @@
 const db_connect = require("./config/dbconnect");
 const express = require("express");
 const authRouter = require("./routes/authroute");
+const productRouter = require("./routes/projuctroute");
 const bodyParser = require("body-parser");
 const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
@@ -17,6 +18,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie_parser());
 
 app.use("/api/user/", authRouter);
+
+app.use("/api/product", productRouter);
 app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
