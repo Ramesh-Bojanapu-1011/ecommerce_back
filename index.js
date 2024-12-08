@@ -5,15 +5,19 @@ const productRouter = require("./routes/projuctroute");
 const bodyParser = require("body-parser");
 const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
+const moragan = require("morgan");
+db_connect();
+const app = express();
 
 const dotenv = require("dotenv");
 dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
+
+app.use(moragan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie_parser());
@@ -22,8 +26,6 @@ app.use(cookie_parser());
 app.use("/api/user/", authRouter);
 app.use("/api/product", productRouter);
 
-
-
 app.get("/", (_req, res) => {
   res.send("Hello World!");
 });
@@ -31,5 +33,3 @@ app.get("/", (_req, res) => {
 /* are setting up middleware functions in the Express application. */
 app.use(not_found);
 app.use(error_handler);
-
-db_connect();

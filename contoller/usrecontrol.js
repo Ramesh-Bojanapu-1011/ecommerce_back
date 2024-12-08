@@ -43,7 +43,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
     password: password,
   };
 
-  console.log(user_details);
+  // console.log(user_details);
   const user = await usermodel.findOne({ email: email });
   if (user && (await user.is_password_is_matched(password))) {
     const refreshToken = await generate_Refresh_Token(user?._id);
@@ -54,7 +54,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
       },
       { new: true }
     );
-    console.log(update_user);
+    // console.log(update_user);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
@@ -83,7 +83,7 @@ const get_all_users = asyncHandler(async (req, res) => {
   try {
     const getAllUsers = await usermodel.find();
     res.json(getAllUsers);
-    console.log(getAllUsers);
+    // console.log(getAllUsers);
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
@@ -121,7 +121,7 @@ const get_single_user = asyncHandler(async (req, res) => {
 breakdown of what the function does: */
 const handle_refresh_token = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
-  console.log(cookie)
+  // console.log(cookie)
   if (!cookie?.refreshToken) throw new Error(" No refresh tokuen in cookie");
   const refreshToken = cookie.refreshToken;
   // console.log(refreshToken);
