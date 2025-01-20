@@ -5,7 +5,6 @@ const validate_mongoos_id = require("../utils/validatemongodgid");
 const { generate_Refresh_Token } = require("../config/RefreshTocan");
 const jwt = require("jsonwebtoken");
 
-
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
 const createUser = asyncHandler(async (req, res) => {
@@ -54,11 +53,11 @@ const login_User_Controle = asyncHandler(async (req, res) => {
       },
       { new: true }
     );
-    // console.log(update_user);
+    console.log(update_user);
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
-      secure: true
+      secure: true,
     });
     res.json({
       status: 200,
@@ -129,13 +128,13 @@ const handle_refresh_token = asyncHandler(async (req, res) => {
   const user = await usermodel.findOne({ refreshToken });
   if (!user) throw new Error(" No refresh token in db or not matched ");
   jwt.verify(refreshToken, process.env.jwt_sckrit, (err, decoded) => {
-    if (err || user.id !== decoded.id) { throw new Error(" invalid refresh token") };
-    const token = generate_Token(user?._id)
+    if (err || user.id !== decoded.id) {
+      throw new Error(" invalid refresh token");
+    }
+    const token = generate_Token(user?._id);
     res.json({ token });
   });
 });
-
-
 
 /* The `handlelogout` function is responsible for logging out a user from the system. Here is a
 breakdown of what the function does: */
@@ -146,15 +145,13 @@ const handlelogout = asyncHandler(async (req, res) => {
   const user = await usermodel.findOne({ refreshToken });
   if (!user) throw new Error(" No refresh token in db or not matched ");
   // const newRefreshToken = generate_Token(user._id);
-  res.clearCookie('refreshToken', {
+  res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: "strict",
   });
   res.json({ message: "Logged out successfully" });
 });
-
-
 
 /* The `update_user` function is responsible for updating a user's information in the database based on
 the provided user ID. Here is a breakdown of what the function does: */
@@ -227,6 +224,25 @@ const unblock_user = asyncHandler(async (req, res) => {
   }
 });
 
+const updatePassword = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { oldPassword, newPassword } = req.body;
+    const user = await usermodel.findById(id);
+    const isValidPassword = await bcrypt.compare(oldPassword, user.password);
+    if (!isValidPassword) {
+      throw new Error({ status: 400, message: "Invalid old password" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    throw new Error({ status: 400, message: error });
+  }
+});
+
 /* The `module.exports` statement in the JavaScript code snippet is exporting an object that contains
 references to various functions defined in the file. By exporting these functions, they become
 accessible to other parts of the application that import this file. Each function corresponds to a
@@ -242,4 +258,5 @@ module.exports = {
   block_user,
   handle_refresh_token,
   handlelogout,
+  updatePassword
 };

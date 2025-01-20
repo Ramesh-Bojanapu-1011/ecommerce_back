@@ -62,6 +62,7 @@ database using the `productmodel.find()`.*/
 const get_all_products = asyncHandler(async (req, res) => {
   console.log();
   try {
+    // filtering
     const queryobj = { ...req.query };
     const excludeFields = ["page", "sort", "limit", "fields"];
     excludeFields.forEach((el) => delete queryobj[el]);
@@ -70,8 +71,42 @@ const get_all_products = asyncHandler(async (req, res) => {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
     // gte=Greater than or equal to |gt =Greater than |lte= Less than or equal to |lt =Less than
     console.log(JSON.parse(queryStr));
-    const getallProducts = await productmodel.find(JSON.parse(queryStr));
-    // console.log(products);
+    let query = productmodel.find(JSON.parse(queryStr));
+
+    // Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-createdAt");
+    }
+
+    // Limiting fields
+    // if (req.query.fields) {
+    //   const fields = req.query.fields.split(",").join(" ");
+    //   query = query.select(fields);
+    // } else {
+    //   query = query.select("__v");
+    // }
+
+    // Pagenation
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const skip = (page - 1) * limit;
+    query = query.skip(skip).limit(limit);
+    if (req.query.page) {
+      const count = await productmodel.countDocuments();
+      if (skip >= count) {
+        throw new Error("this page is does not exist");
+      }
+    } else {
+      res.json(await query);
+    }
+    console.log(page, limit, skip);
+
+
+    //Output
+    const getallProducts = await query;
     res.json(getallProducts);
   } catch (err) {
     throw new Error(err);
