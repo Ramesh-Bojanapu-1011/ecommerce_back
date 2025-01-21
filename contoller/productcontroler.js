@@ -1,6 +1,6 @@
-const productmodel = require("../models/productmodel");
-const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
+const productmodel = require('../models/productmodel');
+const asyncHandler = require('express-async-handler');
+const slugify = require('slugify');
 
 /* The `createProduct` function is an asynchronous handler that creates a new product in the database. */
 const createProduct = asyncHandler(async (req, res) => {
@@ -38,7 +38,7 @@ based on the provided ID. Here's a breakdown of what the function does: */
 const deleteProduct = asyncHandler(async (req, res) => {
   try {
     await productmodel.findByIdAndDelete(req.params.id);
-    res.json({ message: "Product deleted successfully" });
+    res.json({ message: 'Product deleted successfully' });
   } catch (err) {
     throw new Error(err);
   }
@@ -49,7 +49,7 @@ const getaProduct = asyncHandler(async (req, res) => {
   try {
     const product = await productmodel.findById(req.params.id);
     if (!product) {
-      res.status(404).json({ message: "product not found" });
+      res.status(404).json({ message: 'product not found' });
     }
     res.json(product);
   } catch (err) {
@@ -64,7 +64,7 @@ const get_all_products = asyncHandler(async (req, res) => {
   try {
     // filtering
     const queryobj = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "fields"];
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryobj[el]);
     console.log(queryobj);
     let queryStr = JSON.stringify(queryobj);
@@ -75,10 +75,10 @@ const get_all_products = asyncHandler(async (req, res) => {
 
     // Sorting
     if (req.query.sort) {
-      const sortBy = req.query.sort.split(",").join(" ");
+      const sortBy = req.query.sort.split(',').join(' ');
       query = query.sort(sortBy);
     } else {
-      query = query.sort("-createdAt");
+      query = query.sort('-createdAt');
     }
 
     // Limiting fields
@@ -97,13 +97,12 @@ const get_all_products = asyncHandler(async (req, res) => {
     if (req.query.page) {
       const count = await productmodel.countDocuments();
       if (skip >= count) {
-        throw new Error("this page is does not exist");
+        throw new Error('this page is does not exist');
       }
     } else {
       res.json(await query);
     }
     console.log(page, limit, skip);
-
 
     //Output
     const getallProducts = await query;
@@ -120,7 +119,7 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
     const product = await productmodel.findById(req.body.productId);
     // console.log("product", product);
     if (!product) {
-      res.status(404).json({ message: "product not found" });
+      res.status(404).json({ message: 'product not found' });
     }
     const cart = await req.user.cart;
     const productInCart = cart.products.find(
@@ -130,14 +129,14 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
     if (productInCart) {
       productInCart.quantity += req.body.quantity;
       await cart.save();
-      res.json({ message: "product added to cart" });
+      res.json({ message: 'product added to cart' });
     } else {
       cart.products.push({
         productId: req.body.productId,
         quantity: req.body.quantity,
       });
       await cart.save();
-      res.json({ message: "product added to cart" });
+      res.json({ message: 'product added to cart' });
     }
   } catch (err) {
     throw new Error(err);

@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 /**
  * The function `generate_Token` generates a JWT token with the provided `id` using a secret key and
@@ -11,6 +11,6 @@ const jwt = require("jsonwebtoken");
  * it has an expiration time of 1 day.
  */
 const generate_Token = (id) => {
-  return jwt.sign({ id }, process.env.jwt_sckrit, { expiresIn: "1d" });
+  return jwt.sign({ id }, process.env.jwt_sckrit, { expiresIn: '1d' });
 };
 module.exports = { generate_Token };
