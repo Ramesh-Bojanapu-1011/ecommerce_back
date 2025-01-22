@@ -12,6 +12,8 @@ const {
   handle_refresh_token,
   handlelogout,
   updatePassword,
+  forgot_password,
+  reset_password,
 } = require('../contoller/usrecontrol');
 const { authMiddleware, isAdmin } = require('../middlewares/authmiddleware');
 
@@ -23,6 +25,8 @@ router.get('/all_users', get_all_users);
 router.get('/refresh', handle_refresh_token);
 router.delete('/delete/:id', delete_user);
 router.post('/update-password', authMiddleware, updatePassword);
+router.post('/forgot-password', forgot_password);
+router.post('/reset-password-token/:token', reset_password);
 router.get('/get-user-details/:id', get_single_user);
 router.put('/update-user/:id', update_user, authMiddleware);
 router.post('/user-type/:id', authMiddleware, isAdmin, get_single_user);

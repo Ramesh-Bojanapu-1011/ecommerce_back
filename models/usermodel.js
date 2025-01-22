@@ -76,7 +76,7 @@ userSchema.pre('save', async function (next) {
 /* The `userSchema.method.createPasswordRestToken` function is a method defined on the `userSchema`
 model in Mongoose. This method is used to generate a password reset token for a user. Here is a
 breakdown of what the function does: */
-userSchema.method.createPasswordRestToken = async function () {
+userSchema.methods.createPasswordRestToken = async function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
   // await jwt.sign({id:this._id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN});
   this.passwordResetToken = crypto

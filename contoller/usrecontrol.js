@@ -4,6 +4,8 @@ const asyncHandler = require("express-async-handler");
 const validate_mongoos_id = require("../utils/validatemongodgid");
 const { generate_Refresh_Token } = require("../config/RefreshTocan");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("./emailcontroler");
+const crypto = require("crypto");
 
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
@@ -218,6 +220,54 @@ const unblock_user = asyncHandler(async (req, res) => {
   }
 });
 
+/* The `forgot_password` function is responsible for generating a password reset token for a user and
+saving it in the database. Here is a breakdown of what the function does: */
+const forgot_password = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await usermodel.findOne({ email: email });
+  if (!user) throw new Error("User not found");
+  const token = await user.createPasswordRestToken();
+  await user.save();
+  const resetUrl = `http://localhost:3001/api/user/reset-password-token/${token}`;
+  const html = `You password reset link is: <a href='${resetUrl}'>Click here</a>`;
+  const data = {
+    to: user.email,
+    subject: "Password reset token",
+    message: "Your password reset token",
+    html: html,
+  };
+  try {
+    sendEmail(data);
+    res.json({ message: "Email sent", token: token });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+/* The `reset_password` function is responsible for updating a user's password based on the provided
+password reset token. Here is a breakdown of what the function does: */
+const reset_password = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await usermodel.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user)
+    throw new Error("Token is invalid or has expired, please try again");
+
+  user.password = password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
+  res.json({ message: "Password reset successfully", user: user });
+});
+
+/* The `updatePassword` function is responsible for updating a user's password in the database based on
+the provided user ID. Here is a breakdown of what the function does: */
 const updatePassword = asyncHandler(async (req, res) => {
   const { id } = req.user;
   const { password } = req.body;
@@ -252,4 +302,6 @@ module.exports = {
   handle_refresh_token,
   handlelogout,
   updatePassword,
+  reset_password,
+  forgot_password,
 };
