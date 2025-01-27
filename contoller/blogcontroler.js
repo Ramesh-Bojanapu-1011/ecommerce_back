@@ -40,7 +40,7 @@ const getallBlogs = asyncHandler(async (_req, res) => {
 const getBlogById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
-    const blog = await blogmodel.findById(id);
+    const blog = await blogmodel.findById(id).populate("likes").populate("dislikes");
     if (!blog) {
       res.status(404);
       throw new Error("Blog not found");
