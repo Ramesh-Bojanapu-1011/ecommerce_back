@@ -12,7 +12,7 @@ const authMiddleware = asyncHandler(async (req, _res, next) => {
       if (token) {
         const decoded = jwt.verify(token, process.env.jwt_sckrit);
         const user_type = await User.findById(decoded?.id);
-        console.log(decoded);
+        // console.log(decoded);
         req.user = user_type;
         next();
       }
@@ -27,7 +27,7 @@ const authMiddleware = asyncHandler(async (req, _res, next) => {
 /* The `isAdmin` function is a middleware function in a Node.js application that checks if the
 authenticated user is an admin. Here is a breakdown of what it does: */
 const isAdmin = asyncHandler(async (req, res, next) => {
-  console.log(req.user);
+  // console.log(req.user);
   const { email } = req.user;
   const Admin_user = await User.findOne({ email });
   if (Admin_user && Admin_user.role == 'admin') {
