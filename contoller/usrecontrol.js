@@ -45,7 +45,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
   };
   const user = await usermodel.findOne({ email: email });
   if (user && (await user.is_password_is_matched(password))) {
-    const refreshToken =  generate_Refresh_Token(user?._id);
+    const refreshToken = await generate_Refresh_Token(user?._id);
     const update_user = await usermodel.findByIdAndUpdate(
       user.id,
       {
