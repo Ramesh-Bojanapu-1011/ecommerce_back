@@ -1,6 +1,5 @@
 const { isValidObjectId } = require('mongoose');
-const blogmodel = require('../models/blogbodel');
-
+const blogmodel = require('../models/blogmodel');
 const asyncHandler = require('express-async-handler');
 const validate_mongoos_id = require('../utils/validatemongodgid');
 
