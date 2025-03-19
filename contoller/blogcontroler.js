@@ -94,34 +94,7 @@ const likeBlog = asyncHandler(async (req, res) => {
       blog_id,
       {
         $pull: { dislikes: login_user },
-        dislikes: false,
-      },
-      {
-        new: true,
-      }
-    );
-    console.log('liked blog', blog);
-    res.json(blog);
-  }
-  if (isliked) {
-    //if user has already liked the blog, remove the like
-    const blog = await blogmodel.findByIdAndUpdate(
-      blog_id,
-      {
-        $pull: { likes: login_user },
-        isliked: false,
-      },
-      {
-        new: true,
-      }
-    );
-    console.log('unliked blog', blog);
-    res.json(blog);
-  } else {
-    //if user has not liked the blog, add the like
-    const blog = await blogmodel.findByIdAndUpdate(
-      blog_id,
-      {
+        isdisliked: false,
         $push: { likes: login_user },
         isliked: true,
       },
@@ -129,8 +102,43 @@ const likeBlog = asyncHandler(async (req, res) => {
         new: true,
       }
     );
+    await blog.save();
+    console.log('liked blog', blog);
     res.json(blog);
   }
+  else {
+    if (isliked) {
+      //if user has already liked the blog, remove the like
+      const blog = await blogmodel.findByIdAndUpdate(
+        blog_id,
+        {
+          $pull: { likes: login_user },
+          isliked: false,
+        },
+        {
+          new: true,
+        }
+      );
+      await blog.save();
+      console.log('unliked blog', blog);
+      res.json(blog);
+    } else {
+      //if user has not liked the blog, add the like
+      const blog = await blogmodel.findByIdAndUpdate(
+        blog_id,
+        {
+          $push: { likes: login_user },
+          isliked: true,
+        },
+        {
+          new: true,
+        }
+      );
+      await blog.save();
+      res.json(blog);
+    }
+  }
+
 });
 
 const dislikeBlog = asyncHandler(async (req, res) => {
@@ -153,44 +161,53 @@ const dislikeBlog = asyncHandler(async (req, res) => {
     const blog = await blogmodel.findByIdAndUpdate(
       blog_id,
       {
-        $pull: { dislikes: login_user },
-        dislikes: false,
-      },
-      {
-        new: true,
-      }
-    );
-
-    res.json(blog);
-  }
-  if (isdisliked) {
-    //if user has already liked the blog, remove the like
-    const blog = await blogmodel.findByIdAndUpdate(
-      blog_id,
-      {
-        $pull: { dislikes: login_user },
-        isdisliked: false,
-      },
-      {
-        new: true,
-      }
-    );
-
-    res.json(blog);
-  } else {
-    //if user has not liked the blog, add the like
-    const blog = await blogmodel.findByIdAndUpdate(
-      blog_id,
-      {
         $push: { dislikes: login_user },
         isdisliked: true,
+        $pull: { likes: login_user },
+        isliked: false,
       },
       {
         new: true,
       }
     );
+    await blog.save();
+
     res.json(blog);
   }
+  else {
+    if (isdisliked) {
+      //if user has already liked the blog, remove the like
+      const blog = await blogmodel.findByIdAndUpdate(
+        blog_id,
+        {
+          $pull: { dislikes: login_user },
+          isdisliked: false,
+        },
+        {
+          new: true,
+        }
+      );
+      await blog.save();
+
+      res.json(blog);
+    } else {
+      //if user has not liked the blog, add the like
+      const blog = await blogmodel.findByIdAndUpdate(
+        blog_id,
+        {
+          $push: { dislikes: login_user },
+          isdisliked: true,
+        },
+        {
+          new: true,
+        }
+      );
+      await blog.save();
+      res.json(blog);
+    }
+
+  }
+
 });
 
 module.exports = {
