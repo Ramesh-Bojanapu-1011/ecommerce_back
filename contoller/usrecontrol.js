@@ -1,11 +1,11 @@
-const { generate_Token } = require('../config/jwtTocken');
-const usermodel = require('../models/usermodel');
-const asyncHandler = require('express-async-handler');
-const validate_mongoos_id = require('../utils/validatemongodgid');
-const { generate_Refresh_Token } = require('../config/RefreshTocan');
-const jwt = require('jsonwebtoken');
-const sendEmail = require('./emailcontroler');
-const crypto = require('crypto');
+const { generate_Token } = require("../config/jwtTocken");
+const usermodel = require("../models/usermodel");
+const asyncHandler = require("express-async-handler");
+const validate_mongoos_id = require("../utils/validatemongodgid");
+const { generate_Refresh_Token } = require("../config/RefreshTocan");
+const jwt = require("jsonwebtoken");
+const sendEmail = require("./emailcontroler");
+const crypto = require("crypto");
 
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
@@ -16,7 +16,7 @@ const createUser = asyncHandler(async (req, res) => {
   const user_mobile = await usermodel.findOne({ mobile: mobile });
   if (user && user_mobile) {
     throw new Error(
-      `user already exists ${user.email} and ${user_mobile.mobile}`
+      `user already exists ${user.email} and ${user_mobile.mobile}`,
     );
   }
 
@@ -51,17 +51,17 @@ const login_User_Controle = asyncHandler(async (req, res) => {
       {
         refreshToken: refreshToken,
       },
-      { new: true }
+      { new: true },
     );
     console.log(update_user);
-    res.cookie('refreshToken', refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
       secure: true,
     });
     res.json({
       status: 200,
-      message: 'login successfully',
+      message: "login successfully",
       data: {
         _id: user?._id,
         Fist_name: user?.Fist_name,
@@ -74,7 +74,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
       },
     });
     // res.json({"status":200,"message":"login successfully","data":user_details});
-  } else res.json({ status: 400, message: 'login failed', data: user_details });
+  } else res.json({ status: 400, message: "login failed", data: user_details });
 });
 
 /* The `get_all_users` function is responsible for fetching all users from the database. Here is a
@@ -120,13 +120,13 @@ const get_single_user = asyncHandler(async (req, res) => {
 breakdown of what the function does: */
 const handle_refresh_token = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
-  if (!cookie?.refreshToken) throw new Error(' No refresh tokuen in cookie');
+  if (!cookie?.refreshToken) throw new Error(" No refresh tokuen in cookie");
   const refreshToken = cookie.refreshToken;
   const user = await usermodel.findOne({ refreshToken });
-  if (!user) throw new Error(' No refresh token in db or not matched ');
+  if (!user) throw new Error(" No refresh token in db or not matched ");
   jwt.verify(refreshToken, process.env.jwt_sckrit, (err, decoded) => {
     if (err || user.id !== decoded.id) {
-      throw new Error(' invalid refresh token');
+      throw new Error(" invalid refresh token");
     }
     const token = generate_Token(user?._id);
     res.json({ token });
@@ -137,17 +137,17 @@ const handle_refresh_token = asyncHandler(async (req, res) => {
 breakdown of what the function does: */
 const handlelogout = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
-  if (!cookie?.refreshToken) throw new Error(' No refresh tokuen in cookie');
+  if (!cookie?.refreshToken) throw new Error(" No refresh tokuen in cookie");
   const refreshToken = cookie.refreshToken;
   const user = await usermodel.findOne({ refreshToken });
-  if (!user) throw new Error(' No refresh token in db or not matched ');
+  if (!user) throw new Error(" No refresh token in db or not matched ");
   // const newRefreshToken = generate_Token(user._id);
-  res.clearCookie('refreshToken', {
+  res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: "strict",
   });
-  res.json({ message: 'Logged out successfully' });
+  res.json({ message: "Logged out successfully" });
 });
 
 /* The `update_user` function is responsible for updating a user's information in the database based on
@@ -163,7 +163,7 @@ const update_user = asyncHandler(async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
     res.json({ UpdateUser });
   } catch (error) {
@@ -190,7 +190,7 @@ const block_user = asyncHandler(async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
     res.json({ blockUser: BlockedUser });
   } catch (error) {
@@ -213,7 +213,7 @@ const unblock_user = asyncHandler(async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
     res.json({ blockUser: UnblockedUser });
   } catch (error) {
@@ -226,7 +226,7 @@ saving it in the database. Here is a breakdown of what the function does: */
 const forgot_password = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await usermodel.findOne({ email: email });
-  if (!user) throw new Error('User not found');
+  if (!user) throw new Error("User not found");
   const token = await user.createPasswordRestToken();
   await user.save();
   const resetUrl = `http://localhost:3001/api/user/reset-password-token/${token}`;
@@ -234,13 +234,13 @@ const forgot_password = asyncHandler(async (req, res) => {
   and expires at ${user.passwordResetExpires}`;
   const data = {
     to: user.email,
-    subject: 'Password reset token',
-    message: 'Your password reset token',
+    subject: "Password reset token",
+    message: "Your password reset token",
     html: html,
   };
   try {
     sendEmail(data);
-    res.json({ message: 'Email sent', token: token });
+    res.json({ message: "Email sent", token: token });
   } catch (error) {
     throw new Error(error);
   }
@@ -251,7 +251,7 @@ password reset token. Here is a breakdown of what the function does: */
 const reset_password = asyncHandler(async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
   const user = await usermodel.findOne({
     passwordResetToken: hashedToken,
@@ -259,13 +259,13 @@ const reset_password = asyncHandler(async (req, res) => {
   });
 
   if (!user)
-    throw new Error('Token is invalid or has expired, please try again');
+    throw new Error("Token is invalid or has expired, please try again");
 
   user.password = password;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
   await user.save();
-  res.json({ message: 'Password reset successfully', user: user });
+  res.json({ message: "Password reset successfully", user: user });
 });
 
 /* The `updatePassword` function is responsible for updating a user's password in the database based on
@@ -276,13 +276,13 @@ const updatePassword = asyncHandler(async (req, res) => {
   validate_mongoos_id(id);
   const user = await usermodel.findById(id);
 
-  if (!user) throw new Error('User not found');
+  if (!user) throw new Error("User not found");
   if (password) {
     user.password = password;
     await user.save();
-    res.json({ message: 'Password updated successfully' });
+    res.json({ message: "Password updated successfully" });
   } else {
-    throw new Error('Password not updated');
+    throw new Error("Password not updated");
   }
 
   // res.json({ message: "Password updated successfully" }, user);

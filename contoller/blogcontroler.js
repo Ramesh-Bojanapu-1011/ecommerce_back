@@ -1,7 +1,7 @@
-const { isValidObjectId } = require('mongoose');
-const blogmodel = require('../models/blogmodel');
-const asyncHandler = require('express-async-handler');
-const validate_mongoos_id = require('../utils/validatemongodgid');
+const { isValidObjectId } = require("mongoose");
+const blogmodel = require("../models/blogmodel");
+const asyncHandler = require("express-async-handler");
+const validate_mongoos_id = require("../utils/validatemongodgid");
 
 const createBlog = asyncHandler(async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const updateBlog = asyncHandler(async (req, res) => {
       req.body,
       {
         new: true,
-      }
+      },
     );
     res.json(updateBlog);
   } catch (err) {
@@ -41,11 +41,11 @@ const getBlogById = asyncHandler(async (req, res) => {
   try {
     const blog = await blogmodel
       .findById(id)
-      .populate('likes')
-      .populate('dislikes');
+      .populate("likes")
+      .populate("dislikes");
     if (!blog) {
       res.status(404);
-      throw new Error('Blog not found');
+      throw new Error("Blog not found");
     }
     res.json(blog);
   } catch (err) {
@@ -59,14 +59,14 @@ const deleteBlog = asyncHandler(async (req, res) => {
   try {
     if (!isValidObjectId(id)) {
       res.status(404);
-      throw new Error('Blog not found');
+      throw new Error("Blog not found");
     }
     const blog = await blogmodel.findByIdAndDelete(id);
     if (!blog) {
       res.status(404);
-      throw new Error('Blog not found');
+      throw new Error("Blog not found");
     }
-    res.json({ message: 'Blog removed' });
+    res.json({ message: "Blog removed" });
   } catch (err) {
     throw new Error(err);
   }
@@ -85,7 +85,7 @@ const likeBlog = asyncHandler(async (req, res) => {
 
   //find the user is already disliked the blog
   const already_disliked = blog?.dislikes?.find(
-    (dislike) => dislike.toString() === login_user.toString()
+    (dislike) => dislike.toString() === login_user.toString(),
   );
 
   if (already_disliked) {
@@ -100,10 +100,10 @@ const likeBlog = asyncHandler(async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
 
-    console.log('liked blog', blog);
+    console.log("liked blog", blog);
     res.json(blog);
   } else {
     if (isliked) {
@@ -116,10 +116,10 @@ const likeBlog = asyncHandler(async (req, res) => {
         },
         {
           new: true,
-        }
+        },
       );
 
-      console.log('unliked blog', blog);
+      console.log("unliked blog", blog);
       res.json(blog);
     } else {
       //if user has not liked the blog, add the like
@@ -131,7 +131,7 @@ const likeBlog = asyncHandler(async (req, res) => {
         },
         {
           new: true,
-        }
+        },
       );
 
       res.json(blog);
@@ -151,7 +151,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
   const isdisliked = blog?.isdisliked;
   //find the user is already disliked the blog
   const already_liked = blog?.likes?.find(
-    (dislike) => dislike.toString() === login_user.toString()
+    (dislike) => dislike.toString() === login_user.toString(),
   );
 
   if (already_liked) {
@@ -166,7 +166,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
 
     res.json(blog);
@@ -181,7 +181,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
         },
         {
           new: true,
-        }
+        },
       );
 
       res.json(blog);
@@ -195,7 +195,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
         },
         {
           new: true,
-        }
+        },
       );
 
       res.json(blog);
