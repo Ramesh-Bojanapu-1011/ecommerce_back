@@ -68,6 +68,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
         Last_name: user?.Last_name,
         mobile: user?.mobile,
         email: user?.email,
+        role: user?.role,
         password: password,
         tocken: generate_Token(user?._id),
       },
