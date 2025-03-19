@@ -181,7 +181,7 @@ const block_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validate_mongoos_id(id);
   try {
-    const blockUser = await usermodel.findByIdAndUpdate(
+    const BlockedUser = await usermodel.findByIdAndUpdate(
       id,
       {
         $set: {
@@ -192,7 +192,7 @@ const block_user = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-    res.json({ blockUser });
+    res.json({ blockUser: BlockedUser });
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
@@ -204,7 +204,7 @@ const unblock_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validate_mongoos_id(id);
   try {
-    const blockUser = await usermodel.findByIdAndUpdate(
+    const UnblockedUser = await usermodel.findByIdAndUpdate(
       id,
       {
         $set: {
@@ -215,7 +215,7 @@ const unblock_user = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-    res.json({ blockUser });
+    res.json({ blockUser: UnblockedUser });
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
