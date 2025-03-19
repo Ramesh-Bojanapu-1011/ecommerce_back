@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { isValidObjectId } = require("mongoose");
 const blogmodel = require("../models/blogmodel");
 const asyncHandler = require("express-async-handler");
@@ -90,49 +91,58 @@ const likeBlog = asyncHandler(async (req, res) => {
 
   if (already_disliked) {
     //if user has already disliked the blog, remove the dislike
-    const blog = await blogmodel.findByIdAndUpdate(
-      blog_id,
-      {
-        $pull: { dislikes: login_user },
-        isdisliked: false,
-        $push: { likes: login_user },
-        isliked: true,
-      },
-      {
-        new: true,
-      },
-    );
+    const blog = await blogmodel
+      .findByIdAndUpdate(
+        blog_id,
+        {
+          $pull: { dislikes: new mongoose.Types.ObjectId(login_user) },
+          isdisliked: false,
+          $push: { likes: new mongoose.Types.ObjectId(login_user) },
+          isliked: true,
+        },
+        {
+          new: true,
+        },
+      )
+      .populate("likes", "Fist_name Last_name email")
+      .populate("dislikes", "Fist_name Last_name email");
 
     console.log("liked blog", blog);
     res.json(blog);
   } else {
     if (isliked) {
       //if user has already liked the blog, remove the like
-      const blog = await blogmodel.findByIdAndUpdate(
-        blog_id,
-        {
-          $pull: { likes: login_user },
-          isliked: false,
-        },
-        {
-          new: true,
-        },
-      );
+      const blog = await blogmodel
+        .findByIdAndUpdate(
+          blog_id,
+          {
+            $pull: { likes: new mongoose.Types.ObjectId(login_user) },
+            isliked: false,
+          },
+          {
+            new: true,
+          },
+        )
+        .populate("likes", "Fist_name Last_name email")
+        .populate("dislikes", "Fist_name Last_name email");
 
       console.log("unliked blog", blog);
       res.json(blog);
     } else {
       //if user has not liked the blog, add the like
-      const blog = await blogmodel.findByIdAndUpdate(
-        blog_id,
-        {
-          $push: { likes: login_user },
-          isliked: true,
-        },
-        {
-          new: true,
-        },
-      );
+      const blog = await blogmodel
+        .findByIdAndUpdate(
+          blog_id,
+          {
+            $push: { likes: new mongoose.Types.ObjectId(login_user) },
+            isliked: true,
+          },
+          {
+            new: true,
+          },
+        )
+        .populate("likes", "Fist_name Last_name email")
+        .populate("dislikes", "Fist_name Last_name email");
 
       res.json(blog);
     }
@@ -156,47 +166,56 @@ const dislikeBlog = asyncHandler(async (req, res) => {
 
   if (already_liked) {
     //if user has already disliked the blog, remove the dislike
-    const blog = await blogmodel.findByIdAndUpdate(
-      blog_id,
-      {
-        $push: { dislikes: login_user },
-        isdisliked: true,
-        $pull: { likes: login_user },
-        isliked: false,
-      },
-      {
-        new: true,
-      },
-    );
+    const blog = await blogmodel
+      .findByIdAndUpdate(
+        blog_id,
+        {
+          $push: { dislikes: new mongoose.Types.ObjectId(login_user) },
+          isdisliked: true,
+          $pull: { likes: new mongoose.Types.ObjectId(login_user) },
+          isliked: false,
+        },
+        {
+          new: true,
+        },
+      )
+      .populate("likes", "Fist_name Last_name email")
+      .populate("dislikes", "Fist_name Last_name email");
 
     res.json(blog);
   } else {
     if (isdisliked) {
       //if user has already liked the blog, remove the like
-      const blog = await blogmodel.findByIdAndUpdate(
-        blog_id,
-        {
-          $pull: { dislikes: login_user },
-          isdisliked: false,
-        },
-        {
-          new: true,
-        },
-      );
+      const blog = await blogmodel
+        .findByIdAndUpdate(
+          blog_id,
+          {
+            $pull: { dislikes: new mongoose.Types.ObjectId(login_user) },
+            isdisliked: false,
+          },
+          {
+            new: true,
+          },
+        )
+        .populate("likes", "Fist_name Last_name email")
+        .populate("dislikes", "Fist_name Last_name email");
 
       res.json(blog);
     } else {
       //if user has not liked the blog, add the like
-      const blog = await blogmodel.findByIdAndUpdate(
-        blog_id,
-        {
-          $push: { dislikes: login_user },
-          isdisliked: true,
-        },
-        {
-          new: true,
-        },
-      );
+      const blog = await blogmodel
+        .findByIdAndUpdate(
+          blog_id,
+          {
+            $push: { dislikes: new mongoose.Types.ObjectId(login_user) },
+            isdisliked: true,
+          },
+          {
+            new: true,
+          },
+        )
+        .populate("likes", "Fist_name Last_name email")
+        .populate("dislikes", "Fist_name Last_name email");
 
       res.json(blog);
     }
