@@ -102,11 +102,10 @@ const likeBlog = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-    await blog.save();
+
     console.log('liked blog', blog);
     res.json(blog);
-  }
-  else {
+  } else {
     if (isliked) {
       //if user has already liked the blog, remove the like
       const blog = await blogmodel.findByIdAndUpdate(
@@ -119,7 +118,7 @@ const likeBlog = asyncHandler(async (req, res) => {
           new: true,
         }
       );
-      await blog.save();
+
       console.log('unliked blog', blog);
       res.json(blog);
     } else {
@@ -134,11 +133,10 @@ const likeBlog = asyncHandler(async (req, res) => {
           new: true,
         }
       );
-      await blog.save();
+
       res.json(blog);
     }
   }
-
 });
 
 const dislikeBlog = asyncHandler(async (req, res) => {
@@ -170,11 +168,9 @@ const dislikeBlog = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-    await blog.save();
 
     res.json(blog);
-  }
-  else {
+  } else {
     if (isdisliked) {
       //if user has already liked the blog, remove the like
       const blog = await blogmodel.findByIdAndUpdate(
@@ -187,7 +183,6 @@ const dislikeBlog = asyncHandler(async (req, res) => {
           new: true,
         }
       );
-      await blog.save();
 
       res.json(blog);
     } else {
@@ -202,12 +197,10 @@ const dislikeBlog = asyncHandler(async (req, res) => {
           new: true,
         }
       );
-      await blog.save();
+
       res.json(blog);
     }
-
   }
-
 });
 
 module.exports = {
