@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
 const moragan = require("morgan");
-db_connect();
+db_connect()
 const app = express();
 
 const dotenv = require("dotenv");
