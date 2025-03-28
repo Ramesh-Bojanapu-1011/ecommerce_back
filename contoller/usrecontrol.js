@@ -229,7 +229,7 @@ const forgot_password = asyncHandler(async (req, res) => {
   if (!user) throw new Error("User not found");
   const token = await user.createPasswordRestToken();
   await user.save();
-  const resetUrl = `http://localhost:3001/api/user/reset-password-token/${token}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/api/user/reset-password-token/${token}`;
   const html = `You password reset link is: <a href='${resetUrl}'>Click here</a> <br/>
   and expires at ${user.passwordResetExpires}`;
   const data = {
