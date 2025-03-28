@@ -2,14 +2,22 @@
   "name": "ecommerce_back",
   "version": "1.0.0",
   "description": "",
+  "homepage": "https://github.com/Ramesh-Bojanapu-1011/ecommerce_back#readme",
+  "bugs": {
+    "url": "https://github.com/Ramesh-Bojanapu-1011/ecommerce_back/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ramesh-Bojanapu-1011/ecommerce_back.git"
+  },
+  "license": "ISC",
+  "author": "",
   "main": "index.js",
   "scripts": {
     "start": "npm run format && nodemon index.js",
     "format": "npx prettier . --write",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
