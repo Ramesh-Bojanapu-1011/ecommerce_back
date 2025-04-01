@@ -97,15 +97,9 @@ const delete_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validate_mongoos_id(id);
   console.log(req.params);
-  try {
-    const deleateduser = await usermodel.findByIdAndDelete(id);
-    if (!deleateduser) {
-      throw new Error({ status: 404, message: error });
-    }
-    res.json({ deleateduser: deleateduser });
-  } catch (error) {
-    throw new Error({ status: 400, message: error });
-  }
+  const deleateduser = await usermodel.findByIdAndDelete(id);
+  if (!deleateduser) throw new Error("user not found");
+  res.json({ deleateduser });
 });
 
 /* The `get_single_user` function is responsible for fetching a single user from the database based on
