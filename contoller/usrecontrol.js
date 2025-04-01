@@ -44,8 +44,11 @@ const login_User_Controle = asyncHandler(async (req, res) => {
     password: password,
   };
   const user = await usermodel.findOne({ email: email });
+  if (!user) {
+    throw new Error("User not found");
+  }
   if (user && (await user.is_password_is_matched(password))) {
-    const refreshToken = await generate_Refresh_Token(user?._id);
+    const refreshToken = generate_Refresh_Token(user?._id);
     const update_user = await usermodel.findByIdAndUpdate(
       user.id,
       {
