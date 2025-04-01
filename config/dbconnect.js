@@ -1,18 +1,17 @@
-const { default: mongoose } = require("mongoose");
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-/**
- * The function `db_connect` attempts to connect to a MongoDB database using Mongoose and logs a
- * success message if the connection is successful.
- */
+// Load environment variables
+dotenv.config();
 
-const db_connect = () => {
+const connectDB = async () => {
   try {
-    mongoose.connect(
-      "mongodb+srv://Lovelyram:xxp5ypXyciIXua1W@cluster0.e40gwsk.mongodb.net/ecommerence?retryWrites=true&w=majority&appName=Cluster0",
-    );
-    console.log("Database Connected Successfully");
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.log("Database error");
+    console.error(`Error: ${error.message}`);
+    process.exit(1); // Exit process if connection fails
   }
 };
-module.exports = db_connect;
+
+export default connectDB;

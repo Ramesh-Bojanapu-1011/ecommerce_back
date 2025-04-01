@@ -4,13 +4,16 @@ const authRouter = require("./routes/authroute");
 const productRouter = require("./routes/projuctroute");
 const blogRouter = require("./routes/blogroute");
 const bodyParser = require("body-parser");
+const { default: connectDB } = require("./config/dbconnect");
 const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
 const moragan = require("morgan");
-db_connect();
+
+connectDB();
 const app = express();
 
 const dotenv = require("dotenv");
+
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
