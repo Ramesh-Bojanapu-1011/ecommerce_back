@@ -1,8 +1,6 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
-const dotenv = require("dotenv");
-
-dotenv.config();
+require("dotenv").config();
 
 /**
  * The function `db_connect` attempts to connect to a MongoDB database using Mongoose and logs a

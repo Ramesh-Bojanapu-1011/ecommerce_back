@@ -95,8 +95,11 @@ const delete_user = asyncHandler(async (req, res) => {
   validate_mongoos_id(id);
   console.log(req.params);
   try {
-    const getauser = await usermodel.findByIdAndDelete(id);
-    res.json({ getauser });
+    const deleateduser = await usermodel.findByIdAndDelete(id);
+    if (!deleateduser) {
+      throw new Error({ status: 404, message: error });
+    }
+    res.json({ deleateduser: deleateduser });
   } catch (error) {
     throw new Error({ status: 400, message: error });
   }
