@@ -9,12 +9,15 @@ const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
 const moragan = require("morgan");
 
-db_connect()
+/* `require("dotenv").config();` is a statement in Node.js that loads the dotenv module and calls its
+`config()` method. This method reads the `.env` file in the root directory of the project and loads
+the environment variables defined in that file into the `process.env` object. This allows you to
+store configuration variables in a separate file (`.env`) and access them in your Node.js
+application without hardcoding them in your code. */
+require("dotenv").config();
+
+db_connect();
 const app = express();
-
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
