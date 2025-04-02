@@ -69,6 +69,7 @@ const get_all_products = asyncHandler(async (req, res) => {
     // Convert query to MongoDB format
     const mongoQuery = {};
     Object.keys(queryobj).forEach((key) => {
+      // gte=Greater than or equal to ||gt =Greater than ||lte= Less than or equal to ||lt =Less than
       if (/\b(gte|gt|lte|lt)\b/.test(key)) {
         // Extract field name and operator
         const [field, operator] = key.split("[");
