@@ -84,7 +84,7 @@ const get_all_products = asyncHandler(async (req, res) => {
       }
     });
 
-    console.log("mongoQuery",mongoQuery);
+    console.log("mongoQuery", mongoQuery);
 
     let query = productmodel.find(mongoQuery);
 

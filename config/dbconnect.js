@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-require("dotenv").config();
-
 /**
  * The function `db_connect` attempts to connect to a MongoDB database using Mongoose and logs a
  * success message if the connection is successful.
