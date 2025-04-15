@@ -6,6 +6,8 @@ const {
   add_product_to_cart,
   updateProduct,
   deleteProduct,
+  add_product_to_wishlist,
+  remove_product_to_wishlist,
 } = require("../contoller/productcontroler");
 const { isAdmin, authMiddleware } = require("../middlewares/authmiddleware");
 const router = express.Router();
@@ -16,6 +18,15 @@ router.get("/getproduct/:id", getaProduct);
 router.post("/create_product", authMiddleware, isAdmin, createProduct);
 router.put("/update/:id", authMiddleware, isAdmin, updateProduct);
 router.delete("/delete/:id", authMiddleware, isAdmin, deleteProduct);
-// router.post("/addcart", add_product_to_cart);
+router.post(
+  "/add_product_to_wishlist",
+  authMiddleware,
+  add_product_to_wishlist,
+);
+router.post(
+  "/remove_product_to_wishlist",
+  authMiddleware,
+  remove_product_to_wishlist,
+);
 
 module.exports = router;

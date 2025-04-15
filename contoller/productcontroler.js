@@ -1,6 +1,7 @@
 const productmodel = require("../models/productmodel");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
+const usermodel = require("../models/usermodel");
 
 /* The `createProduct` function is an asynchronous handler that creates a new product in the database. */
 const createProduct = asyncHandler(async (req, res) => {
@@ -157,10 +158,65 @@ const cart_products = asyncHandler(async (req, res) => {
   }
 });
 
+/* The `add_product_to_wishlist` function is an asynchronous handler that adds a product to a user's
+wishlist in the database. Here's a breakdown of what the function does: */
+const add_product_to_wishlist = asyncHandler(async (req, res) => {
+  try {
+    const product = await productmodel.findById(req.body.productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    const Logeduser = await usermodel.findById(req?.user?.id);
+    if (!Logeduser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const productExists = Logeduser.wishlist.some(
+      (item) => item?.toString() === req.body.productId.toString(),
+    );
+    if (productExists) {
+      return res.json({ message: "Product already in wishlist" });
+    }
+    Logeduser.wishlist.push(req.body.productId);
+    await Logeduser.save();
+
+    return res.json({ message: "Product added to wishlist" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+/* The `remove_product_to_wishlist` function is an asynchronous handler that removes a product from a
+user's wishlist in the database. Here's a breakdown of what the function does: */
+const remove_product_to_wishlist = asyncHandler(async (req, res) => {
+  try {
+    const product = await productmodel.findById(req.body.productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    const Logeduser = await usermodel.findById(req?.user?.id);
+    if (!Logeduser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const productExists = Logeduser.wishlist.some(
+      (item) => item?.toString() === req.body.productId.toString(),
+    );
+    if (productExists) {
+      Logeduser.wishlist.pull(req.body.productId);
+      await Logeduser.save();
+    }
+    return res.json({ message: "Product removed to wishlist" });
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 module.exports = {
   createProduct,
   getaProduct,
   get_all_products,
+  remove_product_to_wishlist,
+  add_product_to_wishlist,
   add_product_to_cart,
   cart_products,
   updateProduct,
