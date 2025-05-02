@@ -4,6 +4,7 @@ const authRouter = require("./routes/authroute");
 const productRouter = require("./routes/projuctroute");
 const blogRouter = require("./routes/blogroute");
 const bodyParser = require("body-parser");
+const cors = require('cors'); // Import the cors middleware
 
 const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
