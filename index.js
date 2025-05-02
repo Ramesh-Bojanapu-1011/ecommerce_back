@@ -4,7 +4,7 @@ const authRouter = require("./routes/authroute");
 const productRouter = require("./routes/projuctroute");
 const blogRouter = require("./routes/blogroute");
 const bodyParser = require("body-parser");
-const cors = require('cors'); // Import the cors middleware
+const cors = require("cors"); // Import the cors middleware
 
 const cookie_parser = require("cookie-parser");
 const { not_found, error_handler } = require("./middlewares/errorhandler");
@@ -28,9 +28,9 @@ app.listen(PORT, () => {
 // Enable CORS for all origins. In production, replace * with the origins
 // that need to be allowed to access your API.
 const corsOptions = {
-  origin: '*', // Or: ['http://localhost:3000', 'https://example.com']
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  origin: "*", // Or: ['http://localhost:3000', 'https://example.com']
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 app.use(cors(corsOptions));
 
 app.use(moragan("dev"));
