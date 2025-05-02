@@ -24,6 +24,14 @@ app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
 
+// Enable CORS for all origins. In production, replace * with the origins
+// that need to be allowed to access your API.
+const corsOptions = {
+  origin: '*', // Or: ['http://localhost:3000', 'https://example.com']
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions));
+
 app.use(moragan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
