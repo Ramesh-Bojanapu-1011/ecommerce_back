@@ -125,21 +125,27 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
     if (!product) {
       res.status(404).json({ message: "product not found" });
     }
-    const cart = await req.user.cart;
-    const productInCart = cart.products.find(
+    const Logeduser = await usermodel.findById(req?.user?.id);
+    // console.log(Logeduser);
+    const cart = Logeduser.cart;
+    console.log(cart);
+
+    // Check if the product is already in the cart
+    const productInCart = cart.find(
       (productInCart) =>
         productInCart.productId.toString() === req.body.productId.toString(),
     );
+    console.log(productInCart);
     if (productInCart) {
       productInCart.quantity += req.body.quantity;
-      await cart.save();
+      await Logeduser.save();
       res.json({ message: "product added to cart" });
     } else {
-      cart.products.push({
+      cart.push({
         productId: req.body.productId,
         quantity: req.body.quantity,
       });
-      await cart.save();
+      await Logeduser.save();
       res.json({ message: "product added to cart" });
     }
   } catch (err) {
@@ -147,12 +153,38 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
   }
 });
 
+/* The `remove_product_from_cart` function is an asynchronous handler that remove a product to a user's cart
+in the database.*/
+const remove_product_from_cart = asyncHandler(async (req, res) => {
+  try {
+    const product = await productmodel.findById(req.body.productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    const Logeduser = await usermodel.findById(req?.user?.id);
+    const productExists = Logeduser.cart.find(
+      (item) => item.productId.toString() === req.body.productId.toString(),
+    );
+    if (productExists) {
+      Logeduser.cart = Logeduser.cart.filter(
+        (item) => item.productId.toString() !== req.body.productId.toString(),
+      );
+      await Logeduser.save();
+      return res.json({ message: "Product removed from cart" });
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 /* The `cart_products` function is an asynchronous handler that retrieves the products in a user's cart
 from the database. */
 const cart_products = asyncHandler(async (req, res) => {
   try {
-    const cart = await req.user.cart;
-    res.json(cart.products);
+    const cart = await req?.user?.cart;
+    res.json(cart);
   } catch (err) {
     throw new Error(err);
   }
@@ -221,4 +253,5 @@ module.exports = {
   cart_products,
   updateProduct,
   deleteProduct,
+  remove_product_from_cart,
 };
