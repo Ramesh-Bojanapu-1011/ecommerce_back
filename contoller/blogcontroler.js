@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-const { isValidObjectId } = require("mongoose");
-const blogmodel = require("../models/blogmodel");
-const asyncHandler = require("express-async-handler");
-const validate_mongoos_id = require("../utils/validatemongodgid");
+const mongoose = require('mongoose');
+const { isValidObjectId } = require('mongoose');
+const blogmodel = require('../models/blogmodel');
+const asyncHandler = require('express-async-handler');
+const validate_mongoos_id = require('../utils/validatemongodgid');
 
 const createBlog = asyncHandler(async (req, res) => {
   try {
@@ -42,11 +42,11 @@ const getBlogById = asyncHandler(async (req, res) => {
   try {
     const blog = await blogmodel
       .findById(id)
-      .populate("likes")
-      .populate("dislikes");
+      .populate('likes')
+      .populate('dislikes');
     if (!blog) {
       res.status(404);
-      throw new Error("Blog not found");
+      throw new Error('Blog not found');
     }
     res.json(blog);
   } catch (err) {
@@ -60,14 +60,14 @@ const deleteBlog = asyncHandler(async (req, res) => {
   try {
     if (!isValidObjectId(id)) {
       res.status(404);
-      throw new Error("Blog not found");
+      throw new Error('Blog not found');
     }
     const blog = await blogmodel.findByIdAndDelete(id);
     if (!blog) {
       res.status(404);
-      throw new Error("Blog not found");
+      throw new Error('Blog not found');
     }
-    res.json({ message: "Blog removed" });
+    res.json({ message: 'Blog removed' });
   } catch (err) {
     throw new Error(err);
   }
@@ -104,10 +104,10 @@ const likeBlog = asyncHandler(async (req, res) => {
           new: true,
         },
       )
-      .populate("likes", "Fist_name Last_name email")
-      .populate("dislikes", "Fist_name Last_name email");
+      .populate('likes', 'Fist_name Last_name email')
+      .populate('dislikes', 'Fist_name Last_name email');
 
-    console.log("liked blog", blog);
+    console.log('liked blog', blog);
     res.json(blog);
   } else {
     if (isliked) {
@@ -123,10 +123,10 @@ const likeBlog = asyncHandler(async (req, res) => {
             new: true,
           },
         )
-        .populate("likes", "Fist_name Last_name email")
-        .populate("dislikes", "Fist_name Last_name email");
+        .populate('likes', 'Fist_name Last_name email')
+        .populate('dislikes', 'Fist_name Last_name email');
 
-      console.log("unliked blog", blog);
+      console.log('unliked blog', blog);
       res.json(blog);
     } else {
       //if user has not liked the blog, add the like
@@ -141,8 +141,8 @@ const likeBlog = asyncHandler(async (req, res) => {
             new: true,
           },
         )
-        .populate("likes", "Fist_name Last_name email")
-        .populate("dislikes", "Fist_name Last_name email");
+        .populate('likes', 'Fist_name Last_name email')
+        .populate('dislikes', 'Fist_name Last_name email');
 
       res.json(blog);
     }
@@ -179,8 +179,8 @@ const dislikeBlog = asyncHandler(async (req, res) => {
           new: true,
         },
       )
-      .populate("likes", "Fist_name Last_name email")
-      .populate("dislikes", "Fist_name Last_name email");
+      .populate('likes', 'Fist_name Last_name email')
+      .populate('dislikes', 'Fist_name Last_name email');
 
     res.json(blog);
   } else {
@@ -197,8 +197,8 @@ const dislikeBlog = asyncHandler(async (req, res) => {
             new: true,
           },
         )
-        .populate("likes", "Fist_name Last_name email")
-        .populate("dislikes", "Fist_name Last_name email");
+        .populate('likes', 'Fist_name Last_name email')
+        .populate('dislikes', 'Fist_name Last_name email');
 
       res.json(blog);
     } else {
@@ -214,8 +214,8 @@ const dislikeBlog = asyncHandler(async (req, res) => {
             new: true,
           },
         )
-        .populate("likes", "Fist_name Last_name email")
-        .populate("dislikes", "Fist_name Last_name email");
+        .populate('likes', 'Fist_name Last_name email')
+        .populate('dislikes', 'Fist_name Last_name email');
 
       res.json(blog);
     }

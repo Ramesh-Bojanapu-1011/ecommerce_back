@@ -1,6 +1,6 @@
-const mongoose = require("mongoose"); // Erase if already required
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
+const mongoose = require('mongoose'); // Erase if already required
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
@@ -29,7 +29,7 @@ var userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "user",
+      default: 'user',
     },
     isBlocked: {
       type: Boolean,
@@ -39,7 +39,7 @@ var userSchema = new mongoose.Schema(
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          ref: 'Product',
         },
         quantity: {
           type: Number,
@@ -50,13 +50,13 @@ var userSchema = new mongoose.Schema(
     address: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Address",
+        ref: 'Address',
       },
     ],
     wishlist: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        ref: 'Product',
       },
     ],
     refreshToken: {
@@ -73,8 +73,8 @@ var userSchema = new mongoose.Schema(
 
 /* This code snippet is a pre-save hook in Mongoose that is used to hash the user's password before
 saving it to the database. */
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
     next();
   }
 
@@ -85,12 +85,12 @@ userSchema.pre("save", async function (next) {
 model in Mongoose. This method is used to generate a password reset token for a user. Here is a
 breakdown of what the function does: */
 userSchema.methods.createPasswordRestToken = async function () {
-  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetToken = crypto.randomBytes(32).toString('hex');
   // await jwt.sign({id:this._id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN});
   this.passwordResetToken = crypto
-    .createHash("sha256")
+    .createHash('sha256')
     .update(resetToken)
-    .digest("hex");
+    .digest('hex');
   this.passwordResetExpires = Date.now() + 30 * 60 * 1000; //10 min
   return resetToken;
 };
@@ -103,4 +103,4 @@ userSchema.methods.is_password_is_matched = async function (entred_password) {
 };
 
 //Export the model
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

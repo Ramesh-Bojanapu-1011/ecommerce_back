@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 /**
  * The function `db_connect` attempts to connect to a MongoDB database using Mongoose and logs a

@@ -1,7 +1,7 @@
-const productmodel = require("../models/productmodel");
-const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
-const usermodel = require("../models/usermodel");
+const productmodel = require('../models/productmodel');
+const asyncHandler = require('express-async-handler');
+const slugify = require('slugify');
+const usermodel = require('../models/usermodel');
 
 /* The `createProduct` function is an asynchronous handler that creates a new product in the database. */
 const createProduct = asyncHandler(async (req, res) => {
@@ -39,7 +39,7 @@ based on the provided ID. Here's a breakdown of what the function does: */
 const deleteProduct = asyncHandler(async (req, res) => {
   try {
     await productmodel.findByIdAndDelete(req.params.id);
-    res.json({ message: "Product deleted successfully" });
+    res.json({ message: 'Product deleted successfully' });
   } catch (err) {
     throw new Error(err);
   }
@@ -50,7 +50,7 @@ const getaProduct = asyncHandler(async (req, res) => {
   try {
     const product = await productmodel.findById(req.params.id);
     if (!product) {
-      res.status(404).json({ message: "product not found" });
+      res.status(404).json({ message: 'product not found' });
     }
     res.json(product);
   } catch (err) {
@@ -64,7 +64,7 @@ const get_all_products = asyncHandler(async (req, res) => {
   try {
     // Filtering
     const queryobj = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "fields"];
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryobj[el]);
 
     // Convert query to MongoDB format
@@ -73,8 +73,8 @@ const get_all_products = asyncHandler(async (req, res) => {
       // gte=Greater than or equal to ||gt =Greater than ||lte= Less than or equal to ||lt =Less than
       if (/\b(gte|gt|lte|lt)\b/.test(key)) {
         // Extract field name and operator
-        const [field, operator] = key.split("[");
-        const cleanOperator = `$${operator.replace("]", "")}`;
+        const [field, operator] = key.split('[');
+        const cleanOperator = `$${operator.replace(']', '')}`;
 
         if (!mongoQuery[field]) {
           mongoQuery[field] = {};
@@ -85,16 +85,16 @@ const get_all_products = asyncHandler(async (req, res) => {
       }
     });
 
-    console.log("mongoQuery", mongoQuery);
+    console.log('mongoQuery', mongoQuery);
 
     let query = productmodel.find(mongoQuery);
 
     // Sorting
     if (req.query.sort) {
-      const sortBy = req.query.sort.split(",").join(" ");
+      const sortBy = req.query.sort.split(',').join(' ');
       query = query.sort(sortBy);
     } else {
-      query = query.sort("-createdAt");
+      query = query.sort('-createdAt');
     }
 
     // Pagination
@@ -106,7 +106,7 @@ const get_all_products = asyncHandler(async (req, res) => {
     const totalDocuments = await productmodel.countDocuments();
 
     if (skip >= totalDocuments) {
-      return res.status(404).json({ message: "This page does not exist" });
+      return res.status(404).json({ message: 'This page does not exist' });
     }
 
     // Execute Query
@@ -123,7 +123,7 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
   try {
     const product = await productmodel.findById(req.body.productId);
     if (!product) {
-      res.status(404).json({ message: "product not found" });
+      res.status(404).json({ message: 'product not found' });
     }
     const Logeduser = await usermodel.findById(req?.user?.id);
     // console.log(Logeduser);
@@ -139,14 +139,14 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
     if (productInCart) {
       productInCart.quantity += req.body.quantity;
       await Logeduser.save();
-      res.json({ message: "product added to cart" });
+      res.json({ message: 'product added to cart' });
     } else {
       cart.push({
         productId: req.body.productId,
         quantity: req.body.quantity,
       });
       await Logeduser.save();
-      res.json({ message: "product added to cart" });
+      res.json({ message: 'product added to cart' });
     }
   } catch (err) {
     throw new Error(err);
@@ -159,7 +159,7 @@ const remove_product_from_cart = asyncHandler(async (req, res) => {
   try {
     const product = await productmodel.findById(req.body.productId);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
     const Logeduser = await usermodel.findById(req?.user?.id);
     const productExists = Logeduser.cart.find(
@@ -170,9 +170,9 @@ const remove_product_from_cart = asyncHandler(async (req, res) => {
         (item) => item.productId.toString() !== req.body.productId.toString(),
       );
       await Logeduser.save();
-      return res.json({ message: "Product removed from cart" });
+      return res.json({ message: 'Product removed from cart' });
     } else {
-      return res.status(404).json({ message: "Product not found in cart" });
+      return res.status(404).json({ message: 'Product not found in cart' });
     }
   } catch (error) {
     throw new Error(error);
@@ -196,25 +196,25 @@ const add_product_to_wishlist = asyncHandler(async (req, res) => {
   try {
     const product = await productmodel.findById(req.body.productId);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
     const Logeduser = await usermodel.findById(req?.user?.id);
     if (!Logeduser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
     const productExists = Logeduser.wishlist.some(
       (item) => item?.toString() === req.body.productId.toString(),
     );
     if (productExists) {
-      return res.json({ message: "Product already in wishlist" });
+      return res.json({ message: 'Product already in wishlist' });
     }
     Logeduser.wishlist.push(req.body.productId);
     await Logeduser.save();
 
-    return res.json({ message: "Product added to wishlist" });
+    return res.json({ message: 'Product added to wishlist' });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
@@ -224,11 +224,11 @@ const remove_product_to_wishlist = asyncHandler(async (req, res) => {
   try {
     const product = await productmodel.findById(req.body.productId);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: 'Product not found' });
     }
     const Logeduser = await usermodel.findById(req?.user?.id);
     if (!Logeduser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
     const productExists = Logeduser.wishlist.some(
       (item) => item?.toString() === req.body.productId.toString(),
@@ -237,7 +237,7 @@ const remove_product_to_wishlist = asyncHandler(async (req, res) => {
       Logeduser.wishlist.pull(req.body.productId);
       await Logeduser.save();
     }
-    return res.json({ message: "Product removed to wishlist" });
+    return res.json({ message: 'Product removed to wishlist' });
   } catch (err) {
     throw new Error(err);
   }
