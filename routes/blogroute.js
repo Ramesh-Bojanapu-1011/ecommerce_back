@@ -7,7 +7,7 @@ const {
   getBlogById,
   deleteBlog,
   likeBlog,
-  dislikeBlog,
+  dislikeBlog
 } = require('../contoller/blogcontroler');
 const { authMiddleware, isAdmin } = require('../middlewares/authmiddleware');
 

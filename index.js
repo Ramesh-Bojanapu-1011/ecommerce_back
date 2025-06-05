@@ -29,7 +29,7 @@ app.listen(PORT, () => {
 // that need to be allowed to access your API.
 const corsOptions = {
   origin: '*', // Or: ['http://localhost:3000', 'https://example.com']
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
 

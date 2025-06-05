@@ -13,11 +13,11 @@ const error_handler = (err, _req, res, _next) => {
   }
   res.json({
     message: err?.message,
-    stack: err?.stack,
+    stack: err?.stack
   });
 };
 //exporting the middlewares
 module.exports = {
   not_found,
-  error_handler,
+  error_handler
 };

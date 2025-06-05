@@ -19,8 +19,8 @@ const updateBlog = asyncHandler(async (req, res) => {
       req.params.id,
       req.body,
       {
-        new: true,
-      },
+        new: true
+      }
     );
     res.json(updateBlog);
   } catch (err) {
@@ -86,7 +86,7 @@ const likeBlog = asyncHandler(async (req, res) => {
 
   //find the user is already disliked the blog
   const already_disliked = blog?.dislikes?.find(
-    (dislike) => dislike.toString() === login_user.toString(),
+    (dislike) => dislike.toString() === login_user.toString()
   );
 
   if (already_disliked) {
@@ -98,11 +98,11 @@ const likeBlog = asyncHandler(async (req, res) => {
           $pull: { dislikes: new mongoose.Types.ObjectId(login_user) },
           isdisliked: false,
           $push: { likes: new mongoose.Types.ObjectId(login_user) },
-          isliked: true,
+          isliked: true
         },
         {
-          new: true,
-        },
+          new: true
+        }
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
@@ -116,11 +116,11 @@ const likeBlog = asyncHandler(async (req, res) => {
         blog_id,
         {
           $pull: { likes: new mongoose.Types.ObjectId(login_user) },
-          isliked: false,
+          isliked: false
         },
         {
-          new: true,
-        },
+          new: true
+        }
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
@@ -134,11 +134,11 @@ const likeBlog = asyncHandler(async (req, res) => {
         blog_id,
         {
           $push: { likes: new mongoose.Types.ObjectId(login_user) },
-          isliked: true,
+          isliked: true
         },
         {
-          new: true,
-        },
+          new: true
+        }
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
@@ -159,7 +159,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
   const isdisliked = blog?.isdisliked;
   //find the user is already disliked the blog
   const already_liked = blog?.likes?.find(
-    (dislike) => dislike.toString() === login_user.toString(),
+    (dislike) => dislike.toString() === login_user.toString()
   );
 
   if (already_liked) {
@@ -171,11 +171,11 @@ const dislikeBlog = asyncHandler(async (req, res) => {
           $push: { dislikes: new mongoose.Types.ObjectId(login_user) },
           isdisliked: true,
           $pull: { likes: new mongoose.Types.ObjectId(login_user) },
-          isliked: false,
+          isliked: false
         },
         {
-          new: true,
-        },
+          new: true
+        }
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
@@ -188,11 +188,11 @@ const dislikeBlog = asyncHandler(async (req, res) => {
         blog_id,
         {
           $pull: { dislikes: new mongoose.Types.ObjectId(login_user) },
-          isdisliked: false,
+          isdisliked: false
         },
         {
-          new: true,
-        },
+          new: true
+        }
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
@@ -205,11 +205,11 @@ const dislikeBlog = asyncHandler(async (req, res) => {
         blog_id,
         {
           $push: { dislikes: new mongoose.Types.ObjectId(login_user) },
-          isdisliked: true,
+          isdisliked: true
         },
         {
-          new: true,
-        },
+          new: true
+        }
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
@@ -225,5 +225,5 @@ module.exports = {
   getBlogById,
   deleteBlog,
   likeBlog,
-  dislikeBlog,
+  dislikeBlog
 };

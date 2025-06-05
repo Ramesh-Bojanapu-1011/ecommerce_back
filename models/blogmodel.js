@@ -5,56 +5,56 @@ var BlogSchema = new mongoose.Schema(
   {
     tilte: {
       type: String,
-      required: true,
+      required: true
     },
     decription: {
       type: String,
-      required: true,
+      required: true
     },
     catagary: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
     },
     numberofViews: {
       type: Number,
-      default: 0,
+      default: 0
     },
     isliked: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isdisliked: {
       type: Boolean,
-      default: false,
+      default: false
     },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
+        ref: 'User'
+      }
     ],
     dislikes: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
+        ref: 'User'
+      }
     ],
     image: {
       type: String,
       default:
-        'https://i.pinimg.com/736x/10/79/30/1079304734a87199e22b4781ad83c8cf.jpg',
+        'https://i.pinimg.com/736x/10/79/30/1079304734a87199e22b4781ad83c8cf.jpg'
     },
     author: {
       type: String,
-      default: 'Admin',
-    },
+      default: 'Admin'
+    }
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 //Export the model

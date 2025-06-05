@@ -13,7 +13,7 @@ const {
   handlelogout,
   updatePassword,
   forgot_password,
-  reset_password,
+  reset_password
 } = require('../contoller/usrecontrol');
 const { authMiddleware, isAdmin } = require('../middlewares/authmiddleware');
 

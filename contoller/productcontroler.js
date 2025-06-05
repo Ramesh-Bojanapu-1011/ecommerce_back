@@ -26,7 +26,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     const updateProduct = await productmodel.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true },
+      { new: true }
     );
     res.json(updateProduct);
   } catch (err) {
@@ -133,7 +133,7 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
     // Check if the product is already in the cart
     const productInCart = cart.find(
       (productInCart) =>
-        productInCart.productId.toString() === req.body.productId.toString(),
+        productInCart.productId.toString() === req.body.productId.toString()
     );
     console.log(productInCart);
     if (productInCart) {
@@ -143,7 +143,7 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
     } else {
       cart.push({
         productId: req.body.productId,
-        quantity: req.body.quantity,
+        quantity: req.body.quantity
       });
       await Logeduser.save();
       res.json({ message: 'product added to cart' });
@@ -163,11 +163,11 @@ const remove_product_from_cart = asyncHandler(async (req, res) => {
     }
     const Logeduser = await usermodel.findById(req?.user?.id);
     const productExists = Logeduser.cart.find(
-      (item) => item.productId.toString() === req.body.productId.toString(),
+      (item) => item.productId.toString() === req.body.productId.toString()
     );
     if (productExists) {
       Logeduser.cart = Logeduser.cart.filter(
-        (item) => item.productId.toString() !== req.body.productId.toString(),
+        (item) => item.productId.toString() !== req.body.productId.toString()
       );
       await Logeduser.save();
       return res.json({ message: 'Product removed from cart' });
@@ -203,7 +203,7 @@ const add_product_to_wishlist = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const productExists = Logeduser.wishlist.some(
-      (item) => item?.toString() === req.body.productId.toString(),
+      (item) => item?.toString() === req.body.productId.toString()
     );
     if (productExists) {
       return res.json({ message: 'Product already in wishlist' });
@@ -231,7 +231,7 @@ const remove_product_to_wishlist = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const productExists = Logeduser.wishlist.some(
-      (item) => item?.toString() === req.body.productId.toString(),
+      (item) => item?.toString() === req.body.productId.toString()
     );
     if (productExists) {
       Logeduser.wishlist.pull(req.body.productId);
@@ -253,5 +253,5 @@ module.exports = {
   cart_products,
   updateProduct,
   deleteProduct,
-  remove_product_from_cart,
+  remove_product_from_cart
 };

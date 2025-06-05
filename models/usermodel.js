@@ -7,68 +7,68 @@ var userSchema = new mongoose.Schema(
   {
     Fist_name: {
       type: String,
-      required: true,
+      required: true
     },
     Last_name: {
       type: String,
-      required: true,
+      required: true
     },
     email: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
     },
     mobile: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
     role: {
       type: String,
-      default: 'user',
+      default: 'user'
     },
     isBlocked: {
       type: Boolean,
-      default: false,
+      default: false
     },
     cart: [
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
+          ref: 'Product'
         },
         quantity: {
           type: Number,
-          default: 1,
-        },
-      },
+          default: 1
+        }
+      }
     ],
     address: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address',
-      },
+        ref: 'Address'
+      }
     ],
     wishlist: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-      },
+        ref: 'Product'
+      }
     ],
     refreshToken: {
-      type: String,
+      type: String
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
-    passwordResetExpires: Date,
+    passwordResetExpires: Date
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 /* This code snippet is a pre-save hook in Mongoose that is used to hash the user's password before

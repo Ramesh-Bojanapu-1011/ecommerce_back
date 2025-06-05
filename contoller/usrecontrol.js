@@ -16,7 +16,7 @@ const createUser = asyncHandler(async (req, res) => {
   const user_mobile = await usermodel.findOne({ mobile: mobile });
   if (user && user_mobile) {
     throw new Error(
-      `user already exists ${user.email} and ${user_mobile.mobile}`,
+      `user already exists ${user.email} and ${user_mobile.mobile}`
     );
   }
 
@@ -41,7 +41,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user_details = {
     email: email,
-    password: password,
+    password: password
   };
   const user = await usermodel.findOne({ email: email });
   if (!user) {
@@ -52,15 +52,15 @@ const login_User_Controle = asyncHandler(async (req, res) => {
     const update_user = await usermodel.findByIdAndUpdate(
       user.id,
       {
-        refreshToken: refreshToken,
+        refreshToken: refreshToken
       },
-      { new: true },
+      { new: true }
     );
     console.log(update_user);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
-      secure: true,
+      secure: true
     });
     res.json({
       status: 200,
@@ -73,8 +73,8 @@ const login_User_Controle = asyncHandler(async (req, res) => {
         email: user?.email,
         role: user?.role,
         password: password,
-        tocken: generate_Token(user?._id),
-      },
+        tocken: generate_Token(user?._id)
+      }
     });
     // res.json({"status":200,"message":"login successfully","data":user_details});
   } else res.json({ status: 400, message: 'login failed', data: user_details });
@@ -145,7 +145,7 @@ const handlelogout = asyncHandler(async (req, res) => {
   res.clearCookie('refreshToken', {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: 'strict'
   });
   res.json({ message: 'Logged out successfully' });
 });
@@ -159,11 +159,11 @@ const update_user = asyncHandler(async (req, res) => {
     const UpdateUser = await usermodel.findByIdAndUpdate(
       id,
       {
-        $set: req.body,
+        $set: req.body
       },
       {
-        new: true,
-      },
+        new: true
+      }
     );
     res.json({ UpdateUser });
   } catch (error) {
@@ -185,12 +185,12 @@ const block_user = asyncHandler(async (req, res) => {
       id,
       {
         $set: {
-          isBlocked: true,
-        },
+          isBlocked: true
+        }
       },
       {
-        new: true,
-      },
+        new: true
+      }
     );
     res.json({ blockUser: BlockedUser });
   } catch (error) {
@@ -208,12 +208,12 @@ const unblock_user = asyncHandler(async (req, res) => {
       id,
       {
         $set: {
-          isBlocked: false,
-        },
+          isBlocked: false
+        }
       },
       {
-        new: true,
-      },
+        new: true
+      }
     );
     res.json({ blockUser: UnblockedUser });
   } catch (error) {
@@ -236,7 +236,7 @@ const forgot_password = asyncHandler(async (req, res) => {
     to: user.email,
     subject: 'Password reset token',
     message: 'Your password reset token',
-    html: html,
+    html: html
   };
   try {
     sendEmail(data);
@@ -255,7 +255,7 @@ const reset_password = asyncHandler(async (req, res) => {
 
   const user = await usermodel.findOne({
     passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() },
+    passwordResetExpires: { $gt: Date.now() }
   });
 
   if (!user)
@@ -305,5 +305,5 @@ module.exports = {
   handlelogout,
   updatePassword,
   reset_password,
-  forgot_password,
+  forgot_password
 };

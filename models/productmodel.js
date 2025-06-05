@@ -6,54 +6,54 @@ var productSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     slug: {
       type: String,
       unique: true,
       lowercase: true,
-      required: true,
+      required: true
     },
     description: {
       type: String,
-      required: true,
+      required: true
     },
     price: {
       type: Number,
-      required: true,
+      required: true
     },
     category: {
       type: String,
-      required: true,
+      required: true
     },
     brand: {
       type: String,
-      required: true,
+      required: true
     },
     quantity: {
       type: Number,
-      required: true,
+      required: true
     },
     sold: {
       type: Number,
-      default: 0,
+      default: 0
     },
     image: {
       type: Array,
-      required: true,
+      required: true
     },
     color: {
       type: String,
-      required: true,
+      required: true
     },
     ratings: [
       {
         star: Number,
-        postedby: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      },
-    ],
+        postedby: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+      }
+    ]
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 //Export the model
