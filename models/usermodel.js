@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'; // Erase if already required
 import bcrypt from 'bcrypt';
-import { randomBytes, createHash } from 'crypto';
+import crypto from 'crypto';
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
@@ -85,9 +85,9 @@ userSchema.pre('save', async function (next) {
 model in Mongoose. This method is used to generate a password reset token for a user. Here is a
 breakdown of what the function does: */
 userSchema.methods.createPasswordRestToken = async function () {
-  const resetToken = randomBytes(32).toString('hex');
+  const resetToken = crypto.randomBytes(32).toString('hex');
   // await jwt.sign({id:this._id},process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN});
-  this.passwordResetToken = createHash('sha256')
+  this.passwordResetToken = crypto.createHash('sha256')
     .update(resetToken)
     .digest('hex');
   this.passwordResetExpires = Date.now() + 30 * 60 * 1000; //10 min

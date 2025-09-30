@@ -2,11 +2,11 @@ import Token from '../config/jwtTocken.js';
 const { generate_Token } = Token;
 import usermodel from '../models/usermodel.js';
 import asyncHandler from 'express-async-handler';
-import validate_mongoos_id from '../utils/validatemongodgid.js';
+import mongoose_object_id_validator from '../utils/validatemongodgid.js';
 import { generate_Refresh_Token } from '../config/RefreshTocan.js';
 import jwt from 'jsonwebtoken';
 import sendEmail from './emailcontroler.js';
-import { createHash } from 'crypto';
+import crypto from 'crypto';
 
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
@@ -96,7 +96,7 @@ const get_all_users = asyncHandler(async (req, res) => {
 provided user ID. Here is a breakdown of what the function does: */
 const delete_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
 
   const deleateduser = await usermodel.findByIdAndDelete(id);
   if (!deleateduser) throw new Error('user not found');
@@ -107,7 +107,7 @@ const delete_user = asyncHandler(async (req, res) => {
 the provided user ID. Here is a breakdown of what the function does: */
 const get_single_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
 
   try {
     const getauser = await usermodel.findById(id);
@@ -156,7 +156,7 @@ const handlelogout = asyncHandler(async (req, res) => {
 the provided user ID. Here is a breakdown of what the function does: */
 const update_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
   try {
     const UpdateUser = await usermodel.findByIdAndUpdate(
       id,
@@ -181,7 +181,7 @@ returns the updated user object with the `isBlocked` set to `true`. If there is 
 process, it throws an error with status code 400 and the error message. */
 const block_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
   try {
     const BlockedUser = await usermodel.findByIdAndUpdate(
       id,
@@ -204,7 +204,7 @@ const block_user = asyncHandler(async (req, res) => {
 the database based on the provided user ID. Here is a breakdown of what the function does: */
 const unblock_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
   try {
     const UnblockedUser = await usermodel.findByIdAndUpdate(
       id,
@@ -253,7 +253,7 @@ password reset token. Here is a breakdown of what the function does: */
 const reset_password = asyncHandler(async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-  const hashedToken = createHash('sha256').update(token).digest('hex');
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
   const user = await usermodel.findOne({
     passwordResetToken: hashedToken,
@@ -275,7 +275,7 @@ the provided user ID. Here is a breakdown of what the function does: */
 const updatePassword = asyncHandler(async (req, res) => {
   const { id } = req.user;
   const { password } = req.body;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
   const user = await usermodel.findById(id);
 
   if (!user) throw new Error('User not found');

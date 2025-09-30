@@ -1,8 +1,8 @@
-import { createTransport } from 'nodemailer';
+import nodemailer from 'nodemailer';
 import asyncHandler from 'express-async-handler';
 
 const sendEmail = asyncHandler(async (data) => {
-  const transporter = createTransport({
+  const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USERNAME,

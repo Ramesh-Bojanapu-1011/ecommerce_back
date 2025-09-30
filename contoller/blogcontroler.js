@@ -4,7 +4,7 @@ import { isValidObjectId } from 'mongoose';
 import asyncHandler from 'express-async-handler';
 // import validate_mongoos_id from '../utils/validatemongodgid';
 import blogmodel from '../models/blogmodel.js';
-import validate_mongoos_id from '../utils/validatemongodgid.js';
+import mongoose_object_id_validator from '../utils/validatemongodgid.js';
 
 const createBlog = asyncHandler(async (req, res) => {
   try {
@@ -58,7 +58,7 @@ const getBlogById = asyncHandler(async (req, res) => {
 
 const deleteBlog = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validate_mongoos_id(id);
+  mongoose_object_id_validator(id);
   try {
     if (!isValidObjectId(id)) {
       res.status(404);
@@ -77,7 +77,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
 
 const likeBlog = asyncHandler(async (req, res) => {
   const { blog_id } = req.params;
-  validate_mongoos_id(blog_id);
+  mongoose_object_id_validator(blog_id);
 
   const blog = await blogmodel.findById(blog_id);
 
@@ -149,7 +149,7 @@ const likeBlog = asyncHandler(async (req, res) => {
 
 const dislikeBlog = asyncHandler(async (req, res) => {
   const { blog_id } = req.params;
-  validate_mongoos_id(blog_id);
+  mongoose_object_id_validator(blog_id);
 
   const blog = await blogmodel.findById(blog_id);
 
