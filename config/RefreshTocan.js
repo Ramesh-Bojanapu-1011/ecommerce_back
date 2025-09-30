@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
  * The function `generate_Refresh_Token` generates a refresh token using the user's ID and a secret key
@@ -11,4 +11,4 @@ const jwt = require('jsonwebtoken');
 const generate_Refresh_Token = (id) => {
   return jwt.sign({ id }, process.env.jwt_sckrit, { expiresIn: '3d' });
 };
-module.exports = { generate_Refresh_Token };
+export { generate_Refresh_Token };

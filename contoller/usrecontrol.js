@@ -1,11 +1,12 @@
-const { generate_Token } = require('../config/jwtTocken');
-const usermodel = require('../models/usermodel');
-const asyncHandler = require('express-async-handler');
-const validate_mongoos_id = require('../utils/validatemongodgid');
-const { generate_Refresh_Token } = require('../config/RefreshTocan');
-const jwt = require('jsonwebtoken');
-const sendEmail = require('./emailcontroler');
-const crypto = require('crypto');
+import Token from '../config/jwtTocken.js';
+const { generate_Token } = Token;
+import usermodel from '../models/usermodel.js';
+import asyncHandler from 'express-async-handler';
+import validate_mongoos_id from '../utils/validatemongodgid.js';
+import { generate_Refresh_Token } from '../config/RefreshTocan.js';
+import jwt from 'jsonwebtoken';
+import sendEmail from './emailcontroler.js';
+import { createHash } from 'crypto';
 
 /* The `createUser` function is responsible for creating a new user in the system. Here is a breakdown
 of what the function does: */
@@ -56,7 +57,7 @@ const login_User_Controle = asyncHandler(async (req, res) => {
       },
       { new: true }
     );
-    console.log(update_user);
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
@@ -96,7 +97,7 @@ provided user ID. Here is a breakdown of what the function does: */
 const delete_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validate_mongoos_id(id);
-  console.log(req.params);
+
   const deleateduser = await usermodel.findByIdAndDelete(id);
   if (!deleateduser) throw new Error('user not found');
   res.json({ deleateduser });
@@ -107,9 +108,10 @@ the provided user ID. Here is a breakdown of what the function does: */
 const get_single_user = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validate_mongoos_id(id);
-  console.log(req.params);
+
   try {
     const getauser = await usermodel.findById(id);
+    if (!getauser) throw new Error('user not found');
     res.json({ getauser });
   } catch (error) {
     throw new Error({ status: 400, message: error });
@@ -251,7 +253,7 @@ password reset token. Here is a breakdown of what the function does: */
 const reset_password = asyncHandler(async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const hashedToken = createHash('sha256').update(token).digest('hex');
 
   const user = await usermodel.findOne({
     passwordResetToken: hashedToken,
@@ -292,7 +294,7 @@ const updatePassword = asyncHandler(async (req, res) => {
 references to various functions defined in the file. By exporting these functions, they become
 accessible to other parts of the application that import this file. Each function corresponds to a
 specific operation related to user management in the system: */
-module.exports = {
+export {
   createUser,
   login_User_Controle,
   get_all_users,

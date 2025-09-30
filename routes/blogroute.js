@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const {
+import { Router } from 'express';
+const router = Router();
+import {
   createBlog,
   updateBlog,
   getallBlogs,
@@ -8,16 +8,16 @@ const {
   deleteBlog,
   likeBlog,
   dislikeBlog
-} = require('../contoller/blogcontroler');
-const { authMiddleware, isAdmin } = require('../middlewares/authmiddleware');
+} from '../contoller/blogcontroler.js';
+import Auth from '../middlewares/authmiddleware.js';
 
 router.get('/all', getallBlogs);
 router.get('/getBlogById/:id', getBlogById);
-router.put('/likeblog/:blog_id', authMiddleware, likeBlog);
-router.put('/dislikeblog/:blog_id', authMiddleware, dislikeBlog);
-router.delete('/deleteblog/:id', authMiddleware, isAdmin, deleteBlog);
+router.put('/likeblog/:blog_id', Auth.authMiddleware, likeBlog);
+router.put('/dislikeblog/:blog_id', Auth.authMiddleware, dislikeBlog);
+router.delete('/deleteblog/:id', Auth.authMiddleware, Auth.isAdmin, deleteBlog);
 
-router.post('/create', authMiddleware, isAdmin, createBlog);
-router.put('/update/:id', authMiddleware, isAdmin, updateBlog);
+router.post('/create', Auth.authMiddleware, Auth.isAdmin, createBlog);
+router.put('/update/:id', Auth.authMiddleware, Auth.isAdmin, updateBlog);
 
-module.exports = router;
+export default router;

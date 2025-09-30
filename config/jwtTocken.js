@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
  * The function `generate_Token` generates a JWT token with the provided `id` using a secret key and
@@ -13,4 +13,4 @@ const jwt = require('jsonwebtoken');
 const generate_Token = (id) => {
   return jwt.sign({ id }, process.env.jwt_sckrit, { expiresIn: '1d' });
 };
-module.exports = { generate_Token };
+export default { generate_Token };

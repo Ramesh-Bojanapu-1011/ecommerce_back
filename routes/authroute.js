@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const {
+import { Router } from 'express';
+const router = Router();
+import {
   createUser,
   login_User_Controle,
   get_all_users,
@@ -14,8 +14,9 @@ const {
   updatePassword,
   forgot_password,
   reset_password
-} = require('../contoller/usrecontrol');
-const { authMiddleware, isAdmin } = require('../middlewares/authmiddleware');
+} from '../contoller/usrecontrol.js';
+import Auth from '../middlewares/authmiddleware.js';
+const { authMiddleware, isAdmin } = Auth;
 
 /* This code snippet is defining various routes using the Express Router in a Node.js application.
 Here's a breakdown of what each route is doing: */
@@ -34,4 +35,4 @@ router.post('/block-user/:id', block_user, isAdmin, authMiddleware);
 router.post('/unblock-user/:id', unblock_user, isAdmin, authMiddleware);
 router.get('/logout', handlelogout);
 
-module.exports = router;
+export default router;

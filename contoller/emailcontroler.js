@@ -1,8 +1,8 @@
-const nodemailer = require('nodemailer');
-const asyncHandler = require('express-async-handler');
+import { createTransport } from 'nodemailer';
+import asyncHandler from 'express-async-handler';
 
 const sendEmail = asyncHandler(async (data) => {
-  const transporter = nodemailer.createTransport({
+  const transporter = createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USERNAME,
@@ -22,4 +22,4 @@ const sendEmail = asyncHandler(async (data) => {
   console.log('Email sent');
 });
 
-module.exports = sendEmail;
+export default sendEmail;

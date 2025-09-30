@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import { connect } from 'mongoose';
 
 /**
  * The function `db_connect` attempts to connect to a MongoDB database using Mongoose and logs a
@@ -7,11 +7,11 @@ const mongoose = require('mongoose');
 
 const db_connect = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
+    const conn = await connect(process.env.MONGO_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Error: ${error.message}`);
     process.exit(1); // Exit process if connection fails
   }
 };
-module.exports = db_connect;
+export default db_connect;

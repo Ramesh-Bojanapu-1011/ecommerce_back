@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
-const { isValidObjectId } = require('mongoose');
-const blogmodel = require('../models/blogmodel');
-const asyncHandler = require('express-async-handler');
-const validate_mongoos_id = require('../utils/validatemongodgid');
+import mongoose from 'mongoose';
+import { isValidObjectId } from 'mongoose';
+// import blogmodel from '../models/blogmodel';
+import asyncHandler from 'express-async-handler';
+// import validate_mongoos_id from '../utils/validatemongodgid';
+import blogmodel from '../models/blogmodel.js';
+import validate_mongoos_id from '../utils/validatemongodgid.js';
 
 const createBlog = asyncHandler(async (req, res) => {
   try {
@@ -106,8 +108,6 @@ const likeBlog = asyncHandler(async (req, res) => {
       )
       .populate('likes', 'Fist_name Last_name email')
       .populate('dislikes', 'Fist_name Last_name email');
-
-    console.log('liked blog', blog);
     res.json(blog);
   } else if (isliked) {
     //if user has already liked the blog, remove the like
@@ -218,7 +218,7 @@ const dislikeBlog = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {
+export {
   createBlog,
   updateBlog,
   getallBlogs,

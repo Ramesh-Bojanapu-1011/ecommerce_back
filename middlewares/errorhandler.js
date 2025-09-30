@@ -17,7 +17,4 @@ const error_handler = (err, _req, res, _next) => {
   });
 };
 //exporting the middlewares
-module.exports = {
-  not_found,
-  error_handler
-};
+export { not_found, error_handler };

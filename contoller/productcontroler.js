@@ -1,7 +1,7 @@
-const productmodel = require('../models/productmodel');
-const asyncHandler = require('express-async-handler');
-const slugify = require('slugify');
-const usermodel = require('../models/usermodel');
+import productmodel from '../models/productmodel.js';
+import asyncHandler from 'express-async-handler';
+import slugify from 'slugify';
+import usermodel from '../models/usermodel.js';
 
 /* The `createProduct` function is an asynchronous handler that creates a new product in the database. */
 const createProduct = asyncHandler(async (req, res) => {
@@ -126,16 +126,15 @@ const add_product_to_cart = asyncHandler(async (req, res) => {
       res.status(404).json({ message: 'product not found' });
     }
     const Logeduser = await usermodel.findById(req?.user?.id);
-    // console.log(Logeduser);
+
     const cart = Logeduser.cart;
-    console.log(cart);
 
     // Check if the product is already in the cart
     const productInCart = cart.find(
       (productInCart) =>
         productInCart.productId.toString() === req.body.productId.toString()
     );
-    console.log(productInCart);
+
     if (productInCart) {
       productInCart.quantity += req.body.quantity;
       await Logeduser.save();
@@ -243,7 +242,7 @@ const remove_product_to_wishlist = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {
+export {
   createProduct,
   getaProduct,
   get_all_products,

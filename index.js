@@ -1,21 +1,18 @@
-const db_connect = require('./config/dbconnect');
-const express = require('express');
-const authRouter = require('./routes/authroute');
-const productRouter = require('./routes/projuctroute');
-const blogRouter = require('./routes/blogroute');
-const bodyParser = require('body-parser');
-const cors = require('cors'); // Import the cors middleware
+import db_connect from './config/dbconnect.js';
+import express from 'express';
+import authRouter from './routes/authroute.js';
+import productRouter from './routes/projuctroute.js';
+import blogRouter from './routes/blogroute.js';
+import bodyParser from 'body-parser';
+import cors from 'cors'; // Import the cors middleware
 
-const cookie_parser = require('cookie-parser');
-const { not_found, error_handler } = require('./middlewares/errorhandler');
-const moragan = require('morgan');
+import cookie_parser from 'cookie-parser';
+import { not_found, error_handler } from './middlewares/errorhandler.js';
+import moragan from 'morgan';
+import dotenv from 'dotenv';
 
-/* `require("dotenv").config();` is a statement in Node.js that loads the dotenv module and calls its
-`config()` method. This method reads the `.env` file in the root directory of the project and loads
-the environment variables defined in that file into the `process.env` object. This allows you to
-store configuration variables in a separate file (`.env`) and access them in your Node.js
-application without hardcoding them in your code. */
-require('dotenv').config();
+/* Loading environment variables from .env file */
+dotenv.config();
 
 db_connect();
 const app = express();

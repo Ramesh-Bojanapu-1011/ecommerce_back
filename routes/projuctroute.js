@@ -1,5 +1,5 @@
-const express = require('express');
-const {
+import { Router } from 'express';
+import {
   createProduct,
   getaProduct,
   get_all_products,
@@ -9,9 +9,10 @@ const {
   add_product_to_wishlist,
   remove_product_to_wishlist,
   remove_product_from_cart
-} = require('../contoller/productcontroler');
-const { isAdmin, authMiddleware } = require('../middlewares/authmiddleware');
-const router = express.Router();
+} from '../contoller/productcontroler.js';
+import Auth from '../middlewares/authmiddleware.js';
+const { isAdmin, authMiddleware } = Auth;
+const router = Router();
 
 router.get('/all', get_all_products);
 router.get('/getproduct/:id', getaProduct);
@@ -37,4 +38,4 @@ router.post(
   remove_product_to_wishlist
 );
 
-module.exports = router;
+export default router;
