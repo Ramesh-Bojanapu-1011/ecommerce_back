@@ -11,26 +11,27 @@
     "url": "git+https://github.com/Ramesh-Bojanapu-1011/ecommerce_back.git"
   },
   "license": "ISC",
+  "type": "commonjs",
   "author": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run format && nodemon index.js",
+    "start": "nodemon index.js",
     "format": "npx prettier . --write && npx prettier . --check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "express-async-handler": "^1.2.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.20.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.2",
     "morgan": "^1.10.1",
-    "nodemailer": "^7.0.10",
-    "nodemon": "^3.1.10",
+    "nodemailer": "^7.0.12",
+    "nodemon": "^3.1.11",
     "slugify": "^1.6.6"
   }
 }

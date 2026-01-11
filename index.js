@@ -18,7 +18,7 @@ application without hardcoding them in your code. */
 require('dotenv').config();
 
 db_connect();
-const app = express();
+const app = require('express')();
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
@@ -39,12 +39,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookie_parser());
 
 /* setting up routes in the Express application. */
-app.use('/api/user/', authRouter);
+app.use('/api/user', authRouter);
 app.use('/api/product', productRouter);
 app.use('/api/blog', blogRouter);
 
 app.get('/', (_req, res) => {
-  res.send('Hello World!');
+  res.status(200).json({
+    status: 'success',
+
+    body: {
+      user: '/api/user',
+      product: '/api/product/all',
+      blog: '/api/blog'
+    }
+  });
 });
 
 /* are setting up middleware functions in the Express application. */
