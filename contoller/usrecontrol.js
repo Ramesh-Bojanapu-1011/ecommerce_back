@@ -240,6 +240,7 @@ const forgot_password = asyncHandler(async (req, res) => {
   };
   try {
     sendEmail(data);
+console.log({ message: 'Email sent', token: token });
     res.json({ message: 'Email sent', token: token });
   } catch (error) {
     throw new Error(error);
