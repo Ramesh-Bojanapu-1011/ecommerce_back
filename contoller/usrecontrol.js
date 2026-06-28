@@ -239,7 +239,7 @@ const forgot_password = asyncHandler(async (req, res) => {
     html: html
   };
   try {
-   await sendEmail(data);
+    sendEmail(data);
     res.json({ message: 'Email sent', token: token });
   } catch (error) {
     throw new Error(error);
